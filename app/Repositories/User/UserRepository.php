@@ -38,4 +38,19 @@ class UserRepository implements UserRepositoryInterface
 
 		return $userEntity;
 	}
+
+	public function updateByTelegramID(UserEntity $entity): void
+	{
+		$user = User::query()
+			->where('telegram_id', $entity->getTelegramID())
+			->first();
+
+		if (!$user)
+			throw new NotFoundException();
+
+		$user->update([
+			'name' => $entity->getName(),
+			'photo_url' => $entity->getPhotoUrl(),
+		]);
+	}
 }
