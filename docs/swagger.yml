@@ -11,6 +11,8 @@ info:
 tags:
   - name: 'Auth'
     description: 'Authorization operations'
+  - name: 'User'
+    description: 'User operations'
 
 paths:
   /auth/signin:
@@ -24,13 +26,66 @@ paths:
         200:
           $ref: '#/components/responses/Signin'
 
+  /users/me:
+    put:
+      security:
+        - Bearer: []
+      summary: 'Update user'
+      tags:
+        - 'User'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        200:
+          $ref: '#/components/responses/EmptySuccess'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        422:
+          $ref: '#/components/responses/ValidationError'
+
 components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+
   schemas:
+    EmptySuccessResponse:
+      type: object
+      properties:
+        data: {type: array}
+
+    ServiceErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            other: {type: string}
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationErrorResponseItem'
+
+    ValidationErrorResponseItem:
+      type: object
+      properties:
+        fieldName:
+          type: array
+          items: {type: string}
+
     SigninRequestBody:
       type: object
       properties:
         telegramID: {type: integer}
-      required: [telegramID]
+      required:
+        - telegramID
 
     SigninResponse:
       type: object
@@ -40,7 +95,45 @@ components:
           properties:
             token: {type: string}
 
+    UpdateUserRequestBody:
+      type: object
+      properties:
+        telegramID: {type: integer}
+        name: {type: string}
+        photoUrl: {type: string}
+      required:
+        - telegramID
+        - name
+
   examples:
+    EmptySuccessResponse:
+      value:
+        data: []
+
+    NotFoundErrorResponse:
+      value:
+        errors:
+          other: 'Не найдено'
+
+    UnauthorizedErrorResponse:
+      value:
+        errors:
+          other: 'Не авторизован'
+
+    ForbiddenErrorResponse:
+      value:
+        errors:
+          other: 'Недостаточно прав'
+
+    ValidationErrorResponse:
+      value:
+        errors:
+          field1:
+            - 'Ошибка №1'
+            - 'Ошибка №2'
+          field2:
+            - 'Ошибка №1'
+
     SigninRequestBody:
       value:
         telegramID: 576098928
@@ -49,6 +142,12 @@ components:
       value:
         data:
           token: '2|BXC0v5JUewVNxU2oA5aav8IbSFtbsZQtXgtKLLXcf8d15728'
+
+    UpdateUserRequestBody:
+      value:
+        telegramID: 576098928
+        name: 'sunsetsavorer'
+        photoUrl: 'https://avatars.com/sunsetsavorer.svg'
 
   requestBodies:
     Signin:
@@ -61,7 +160,67 @@ components:
             Base:
               $ref: '#/components/examples/SigninRequestBody'
 
+    UpdateUser:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateUserRequestBody'
+          examples:
+            Base:
+              $ref: '#/components/examples/UpdateUserRequestBody'
+
   responses:
+    EmptySuccess:
+      description: 'ok'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmptySuccessResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/EmptySuccessResponse'
+
+    NotFoundError:
+      description: 'not found'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServiceErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/NotFoundErrorResponse'
+
+    UnauthorizedError:
+      description: 'unauthorized'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServiceErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/UnauthorizedErrorResponse'
+
+    ForbiddenError:
+      description: 'forbidden'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServiceErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/ForbiddenErrorResponse'
+
+    ValidationError:
+      description: 'validation failed'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/ValidationErrorResponse'
+
     Signin:
       description: 'ok'
       content:
