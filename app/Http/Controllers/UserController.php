@@ -13,6 +13,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request)
 	{
 		$data = $request->validated();
+		$user = request()->user();
 
 		$uc = new UpdateUserUseCase(
 			new UserRepository()
@@ -20,7 +21,7 @@ class UserController extends Controller
 
 		$uc(
 			new UpdateUserDTO(
-				$data['telegramID'],
+				$user->telegram_id,
 				$data['name'],
 				$data['photoUrl']
 			)

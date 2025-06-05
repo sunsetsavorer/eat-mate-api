@@ -98,11 +98,9 @@ components:
     UpdateUserRequestBody:
       type: object
       properties:
-        telegramID: {type: integer}
         name: {type: string}
         photoUrl: {type: string}
       required:
-        - telegramID
         - name
 
   examples:
@@ -145,7 +143,6 @@ components:
 
     UpdateUserRequestBody:
       value:
-        telegramID: 576098928
         name: 'sunsetsavorer'
         photoUrl: 'https://avatars.com/sunsetsavorer.svg'
 

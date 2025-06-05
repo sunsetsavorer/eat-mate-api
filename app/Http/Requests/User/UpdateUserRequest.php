@@ -29,7 +29,6 @@ class UpdateUserRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'telegramID' => 'required|numeric|exists:users,telegram_id',
 			'name' => 'required',
 			'photoUrl' => 'sometimes'
 		];
@@ -38,9 +37,6 @@ class UpdateUserRequest extends FormRequest
 	public function messages(): array
 	{
 		return [
-			'telegramID.required' => 'Телеграм айди обязателен',
-			'telegramID.exists' => 'Пользователя с таким телеграм айди нет',
-			'telegramID.numeric' => 'Неверный формат телеграм айди',
 			'name.required' => 'Имя обязательно',
 		];
 	}
