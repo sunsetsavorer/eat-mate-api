@@ -8,4 +8,5 @@ interface UserRepositoryInterface
 {
 	public function create(UserEntity $entity): string;
 	public function getByTelegramID(int $telegramID): UserEntity;
+	public function updateByTelegramID(UserEntity $entity): void;
 }

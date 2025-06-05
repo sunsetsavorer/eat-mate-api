@@ -15,6 +15,6 @@ class Authenticate extends Middleware
     {
         return $request->expectsJson()
 			? null
-			: throw new ServiceException('Не авторизован.', 401);
+			: throw new ServiceException('Не авторизован', 401);
     }
 }
