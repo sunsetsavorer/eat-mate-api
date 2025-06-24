@@ -1,0 +1,7 @@
+CREATE TABLE place_branches (
+	id UUID PRIMARY KEY,
+	place_id UUID NOT NULL REFERENCES places(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	address VARCHAR(255) NULL,
+	contact_phone VARCHAR(20) NULL,
+	coordinates JSON NULL
+);

@@ -1,0 +1,3 @@
+DROP TYPE IF EXISTS group_mode;
+
+DROP TABLE IF EXISTS groups;

@@ -1,0 +1,5 @@
+CREATE TABLE places (
+	id UUID PRIMARY KEY,
+	name VARCHAR(255) UNIQUE NOT NULL,
+	icon_path TEXT NULL
+);
