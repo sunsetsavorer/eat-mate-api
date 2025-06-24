@@ -15,7 +15,7 @@ Table place_branches {
   place_id uuid [ref: - places.id]
   address string [null]
   contact_phone string [null]
-  coordinates json [default: '{}']
+  coordinates json [null]
 }
 
 Table groups {
@@ -24,7 +24,7 @@ Table groups {
   owner_id bigint [ref: - users.id]
   is_public bool [default: true]
   selection_mode selection_mode [not null]
-  place_branch_id uuid [ref: - place_branches.id]
+  place_branch_id uuid [null, ref: - place_branches.id]
 }
 
 Table group_members {
@@ -35,7 +35,7 @@ Table group_members {
 Table votes {
   group_id uuid [ref: - groups.id]
   user_id bigint [ref: - users.id]
-  place_branch_id uuid [ref: - place_branches.id]
+  place_branch_id uuid [null, ref: - place_branches.id]
 }
 
 Table group_place_options {
