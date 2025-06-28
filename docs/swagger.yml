@@ -1,0 +1,89 @@
+openapi: 3.1.0
+info:
+  version: '1'
+  title: 'Eat Mate API'
+  description: |
+    Eat Mate API
+  contact:
+    name: 'github'
+    url: 'https://github.com/sunsetsavorer'
+
+tags:
+  - name: 'Auth'
+    description: 'authorization operations'
+
+paths:
+  /v1/auth/signin:
+    post:
+      summary: 'return JWT token'
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/Signin'
+      responses:
+        200:
+          $ref: '#/components/responses/Signin'
+
+components:
+  schemas:
+    JWTToken:
+      type: string
+
+    SigninRequestBody:
+      type: object
+      properties:
+        telegram_id: {type: number}
+        name: {type: string}
+        photo_url: {type: string}
+      required:
+        - telegram_id
+        - name
+
+    SigninResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            token:
+              $ref: '#/components/schemas/JWTToken'
+
+  examples:
+    SigninRequestBodyExample:
+      value:
+        telegram_id: 576098928
+        name: 'sunsetsavorer'
+        photo_url: 'https://example.com/avatars/sunsetsavorer.svg'
+
+    SigninResponseExample:
+      value:
+        data:
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30'
+
+  requestBodies:
+    Signin:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SigninRequestBody'
+          examples:
+            Base:
+              $ref: '#/components/examples/SigninRequestBodyExample'
+
+  responses:
+    Signin:
+      description: 'success authorization'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SigninResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/SigninResponseExample'
+
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
