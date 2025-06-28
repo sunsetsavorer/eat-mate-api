@@ -1,7 +1,7 @@
 MIGRATIONS_PATH = internal/infrastructure/db/migrations
 DSN = postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable
 
-include config/.env.$(ENV)
+include config/.env
 
 app.run:
 	go run cmd/app/main.go
