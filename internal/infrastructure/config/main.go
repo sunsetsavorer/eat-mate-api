@@ -11,6 +11,7 @@ type Config struct {
 	Debug        bool
 	AllowOrigins []string
 	DbConn       string
+	JWTSecret    string
 }
 
 func NewConfig() *Config {
