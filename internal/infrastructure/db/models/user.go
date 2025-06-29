@@ -2,12 +2,12 @@ package models
 
 import "database/sql"
 
-type User struct {
+type UserModel struct {
 	ID       int64          `gorm:"column:id;primaryKey"`
 	Name     string         `gorm:"column:name;not null"`
 	PhotoURL sql.NullString `gorm:"column:photo_url"`
 }
 
-func (User) TableName() string {
+func (UserModel) TableName() string {
 	return "users"
 }
