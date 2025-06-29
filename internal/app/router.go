@@ -36,7 +36,8 @@ func (app App) InitRouter() *gin.Engine {
 
 	v1 := router.Group("v1")
 	{
-
+		userHdlr := http.NewAuthHandler(baseHdlr)
+		userHdlr.RegisterRoutes(v1)
 	}
 
 	return router
