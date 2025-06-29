@@ -1,6 +1,11 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+
+	"github.com/sunsetsavorer/eat-mate-api/internal/domains/user/entities"
+	"github.com/sunsetsavorer/eat-mate-api/pkg/nullable"
+)
 
 type UserModel struct {
 	ID       int64          `gorm:"column:id;primaryKey"`
@@ -10,4 +15,22 @@ type UserModel struct {
 
 func (UserModel) TableName() string {
 	return "users"
+}
+
+func (m UserModel) ToEntity() entities.UserEntity {
+
+	return entities.UserEntity{
+		ID:       m.ID,
+		Name:     m.Name,
+		PhotoURL: nullable.NullStringToPtr(m.PhotoURL),
+	}
+}
+
+func FromEntity(e entities.UserEntity) UserModel {
+
+	return UserModel{
+		ID:       e.GetID(),
+		Name:     e.GetName(),
+		PhotoURL: nullable.PtrToNullString(e.GetPhotoURL()),
+	}
 }
