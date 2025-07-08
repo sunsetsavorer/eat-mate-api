@@ -26,11 +26,9 @@ func (m UserModel) ToEntity() entities.UserEntity {
 	}
 }
 
-func FromEntity(e entities.UserEntity) UserModel {
+func (m *UserModel) FromEntity(e entities.UserEntity) {
 
-	return UserModel{
-		ID:       e.GetID(),
-		Name:     e.GetName(),
-		PhotoURL: nullable.PtrToNullString(e.GetPhotoURL()),
-	}
+	m.ID = e.GetID()
+	m.Name = e.GetName()
+	m.PhotoURL = nullable.PtrToNullString(e.GetPhotoURL())
 }
