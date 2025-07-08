@@ -1,12 +1,15 @@
 package user
 
 import (
+	"fmt"
+
+	"github.com/sunsetsavorer/eat-mate-api/internal/domains/user/entities"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db/models"
 )
 
 type UserRepository struct {
-	Db *db.Db
+	db *db.Db
 }
 
 func NewUserRepository(db *db.Db) *UserRepository {
@@ -14,11 +17,19 @@ func NewUserRepository(db *db.Db) *UserRepository {
 	return &UserRepository{db}
 }
 
-func (repo UserRepository) IsExistsByTelegramID(telegramID int64) bool {
+func (r UserRepository) GetByID(ID int64) (entities.UserEntity, error) {
 
 	var user models.UserModel
 
-	repo.Db.firs
+	err := r.db.Client.
+		First(&user, ID).
+		Error
 
-	return true
+	if err != nil {
+		return entities.UserEntity{}, fmt.Errorf("user finding error: %v", err)
+	}
+
+	entity := user.ToEntity()
+
+	return entity, nil
 }
