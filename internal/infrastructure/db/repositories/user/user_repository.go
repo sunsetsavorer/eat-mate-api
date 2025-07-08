@@ -33,3 +33,20 @@ func (r UserRepository) GetByID(ID int64) (entities.UserEntity, error) {
 
 	return entity, nil
 }
+
+func (r UserRepository) Create(entity entities.UserEntity) error {
+
+	var user models.UserModel
+
+	user.FromEntity(entity)
+
+	err := r.db.Client.
+		Create(&user).
+		Error
+
+	if err != nil {
+		return fmt.Errorf("user creating error: %v", err)
+	}
+
+	return nil
+}
