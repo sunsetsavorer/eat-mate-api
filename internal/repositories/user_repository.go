@@ -1,9 +1,8 @@
 package repositories
 
 import (
-	"fmt"
-
 	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
+	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db/models"
 )
@@ -26,7 +25,7 @@ func (r UserRepository) GetByID(ID int64) (entities.UserEntity, error) {
 		Error
 
 	if err != nil {
-		return entities.UserEntity{}, fmt.Errorf("user finding error: %v", err)
+		return entities.UserEntity{}, exceptions.NewRepositoryError(err)
 	}
 
 	entity := user.ToEntity()
@@ -45,7 +44,7 @@ func (r UserRepository) Create(entity entities.UserEntity) error {
 		Error
 
 	if err != nil {
-		return fmt.Errorf("user creating error: %v", err)
+		return exceptions.NewRepositoryError(err)
 	}
 
 	return nil
