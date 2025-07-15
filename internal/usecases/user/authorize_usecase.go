@@ -6,25 +6,29 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/dtos"
 	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
+	"github.com/sunsetsavorer/eat-mate-api/internal/usecases"
 	"github.com/sunsetsavorer/eat-mate-api/pkg/jwt"
 )
 
 type AuthorizeUseCase struct {
-	UserRepository UserRepositoryInterface
+	log            usecases.LoggerInterface
+	userRepository UserRepositoryInterface
 }
 
 func NewAuthorizeUseCase(
+	log usecases.LoggerInterface,
 	userRepository UserRepositoryInterface,
 ) *AuthorizeUseCase {
 
 	return &AuthorizeUseCase{
+		log,
 		userRepository,
 	}
 }
 
 func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 
-	user, err := uc.UserRepository.GetByID(dto.GetUserID())
+	user, err := uc.userRepository.GetByID(dto.GetUserID())
 	if err != nil {
 		user = entities.UserEntity{
 			ID:       dto.GetUserID(),
@@ -32,8 +36,9 @@ func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 			PhotoURL: dto.GetUserPhotoURL(),
 		}
 
-		err := uc.UserRepository.Create(user)
+		err := uc.userRepository.Create(user)
 		if err != nil {
+			uc.log.Errorf("failed to create user: %v", err)
 			return TokenResponse{}, exceptions.NewBadRequestError(fmt.Errorf("failed to create user"))
 		}
 	}
@@ -44,6 +49,7 @@ func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 		dto.GetTokenLifetime(),
 	)
 	if err != nil {
+		uc.log.Errorf("failed to generate authorization token: %v", err)
 		return TokenResponse{}, exceptions.NewBadRequestError(fmt.Errorf("failed to generate authorization token"))
 	}
 

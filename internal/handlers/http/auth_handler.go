@@ -48,7 +48,10 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 
 	userRepository := repositories.NewUserRepository(hdlr.db)
 
-	uc := user.NewAuthorizeUseCase(userRepository)
+	uc := user.NewAuthorizeUseCase(
+		hdlr.logger,
+		userRepository,
+	)
 
 	token, err := uc.Exec(dto)
 	if err != nil {
