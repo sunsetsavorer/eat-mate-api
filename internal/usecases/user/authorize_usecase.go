@@ -1,8 +1,11 @@
 package user
 
 import (
+	"fmt"
+
 	"github.com/sunsetsavorer/eat-mate-api/internal/dtos"
 	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
+	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/pkg/jwt"
 )
 
@@ -31,7 +34,7 @@ func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 
 		err := uc.UserRepository.Create(user)
 		if err != nil {
-			return TokenResponse{}, err
+			return TokenResponse{}, exceptions.NewBadRequestError(fmt.Errorf("failed to create user"))
 		}
 	}
 
@@ -41,7 +44,7 @@ func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 		dto.GetTokenLifetime(),
 	)
 	if err != nil {
-		return TokenResponse{}, err
+		return TokenResponse{}, exceptions.NewBadRequestError(fmt.Errorf("failed to generate authorization token"))
 	}
 
 	return TokenResponse{token.Value}, nil
