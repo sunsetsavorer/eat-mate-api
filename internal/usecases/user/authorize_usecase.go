@@ -7,22 +7,24 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/internal/usecases"
-	"github.com/sunsetsavorer/eat-mate-api/pkg/jwt"
 )
 
 type AuthorizeUseCase struct {
 	log            usecases.LoggerInterface
 	userRepository UserRepositoryInterface
+	jwtService     usecases.JWTServiceInterface
 }
 
 func NewAuthorizeUseCase(
 	log usecases.LoggerInterface,
 	userRepository UserRepositoryInterface,
+	jwtService usecases.JWTServiceInterface,
 ) *AuthorizeUseCase {
 
 	return &AuthorizeUseCase{
 		log,
 		userRepository,
+		jwtService,
 	}
 }
 
@@ -43,11 +45,7 @@ func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 		}
 	}
 
-	token, err := jwt.GenerateToken(
-		user.GetID(),
-		dto.GetTokenSecret(),
-		dto.GetTokenLifetime(),
-	)
+	token, err := uc.jwtService.GenerateTokenByUserID(user.GetID())
 	if err != nil {
 		uc.log.Errorf("failed to generate authorization token: %v", err)
 		return TokenResponse{}, exceptions.NewBadRequestError(fmt.Errorf("failed to generate authorization token"))

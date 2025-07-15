@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sunsetsavorer/eat-mate-api/internal/dtos"
 	"github.com/sunsetsavorer/eat-mate-api/internal/repositories"
+	"github.com/sunsetsavorer/eat-mate-api/internal/services"
 	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/user"
 )
 
@@ -47,10 +48,15 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 	}
 
 	userRepository := repositories.NewUserRepository(hdlr.db)
+	jwtService := services.NewJWTService(
+		hdlr.config.JWTSecret,
+		time.Minute*30,
+	)
 
 	uc := user.NewAuthorizeUseCase(
 		hdlr.logger,
 		userRepository,
+		jwtService,
 	)
 
 	token, err := uc.Exec(dto)

@@ -10,4 +10,9 @@ type (
 		Error(args ...interface{})
 		Debug(args ...interface{})
 	}
+
+	JWTServiceInterface interface {
+		GenerateTokenByUserID(userID int64) (Token, error)
+		ParseToken(token string) (Token, error)
+	}
 )

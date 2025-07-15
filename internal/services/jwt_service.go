@@ -1,4 +1,4 @@
-package jwt
+package services
 
 import (
 	"crypto/hmac"
@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/sunsetsavorer/eat-mate-api/internal/usecases"
 )
 
 const (
@@ -16,26 +18,42 @@ const (
 	SIGNATURE_INDEX
 )
 
-func GenerateToken(userID int64, secret string, lifeTime time.Duration) (Token, error) {
+type JWTService struct {
+	secret   string
+	lifetime time.Duration
+}
 
-	header := TokenHeader{
+func NewJWTService(
+	secret string,
+	lifetime time.Duration,
+) *JWTService {
+
+	return &JWTService{
+		secret,
+		lifetime,
+	}
+}
+
+func (s JWTService) GenerateTokenByUserID(userID int64) (usecases.Token, error) {
+
+	header := usecases.TokenHeader{
 		Alg: "HS256",
 		Typ: "JWT",
 	}
 
 	jsonHeader, err := json.Marshal(&header)
 	if err != nil {
-		return Token{}, fmt.Errorf("an error occured while marshaling token header: %v", err)
+		return usecases.Token{}, fmt.Errorf("an error occured while marshaling token header: %v", err)
 	}
 
-	payload := TokenPayload{
+	payload := usecases.TokenPayload{
 		UserID: userID,
-		Exp:    time.Now().Add(lifeTime).Unix(),
+		Exp:    time.Now().Add(s.lifetime).Unix(),
 	}
 
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
-		return Token{}, fmt.Errorf("an error occured while marshaling token payload: %v", err)
+		return usecases.Token{}, fmt.Errorf("an error occured while marshaling token payload: %v", err)
 	}
 
 	encodedHeader := base64URLEncode(jsonHeader)
@@ -43,24 +61,24 @@ func GenerateToken(userID int64, secret string, lifeTime time.Duration) (Token, 
 
 	message := encodedHeader + "." + encodedPayload
 
-	signature := getSignature(secret, message)
+	signature := getSignature(s.secret, message)
 
 	encodedSignature := base64URLEncode(signature)
 
 	token := message + "." + encodedSignature
 
-	return Token{
+	return usecases.Token{
 		Payload: payload,
 		Value:   token,
 	}, nil
 }
 
-func ParseToken(token, secret string) (Token, error) {
+func (s JWTService) ParseToken(token string) (usecases.Token, error) {
 
 	parts := strings.Split(token, ".")
 
 	if len(parts) != 3 {
-		return Token{}, fmt.Errorf("invalid token format")
+		return usecases.Token{}, fmt.Errorf("invalid token format")
 	}
 
 	header := parts[HEADER_INDEX]
@@ -69,30 +87,30 @@ func ParseToken(token, secret string) (Token, error) {
 
 	message := header + "." + payload
 
-	actualSignature := getSignature(secret, message)
+	actualSignature := getSignature(s.secret, message)
 	encodedSignature := base64URLEncode(actualSignature)
 
 	if encodedSignature != exceptedSignature {
-		return Token{}, fmt.Errorf("invalid token data")
+		return usecases.Token{}, fmt.Errorf("invalid token data")
 	}
 
 	decodedPayload, err := base64.RawURLEncoding.DecodeString(payload)
 	if err != nil {
-		return Token{}, fmt.Errorf("failed to decode payload: %v", err)
+		return usecases.Token{}, fmt.Errorf("failed to decode payload: %v", err)
 	}
 
-	payloadStruct := TokenPayload{}
+	payloadStruct := usecases.TokenPayload{}
 
 	err = json.Unmarshal(decodedPayload, &payloadStruct)
 	if err != nil {
-		return Token{}, fmt.Errorf("failed to parse payload: %v", err)
+		return usecases.Token{}, fmt.Errorf("failed to parse payload: %v", err)
 	}
 
 	if isTokenExpired(payloadStruct.Exp) {
-		return Token{}, fmt.Errorf("token expired")
+		return usecases.Token{}, fmt.Errorf("token expired")
 	}
 
-	return Token{
+	return usecases.Token{
 		Payload: payloadStruct,
 		Value:   token,
 	}, nil

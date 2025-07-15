@@ -1,4 +1,4 @@
-package jwt
+package usecases
 
 type (
 	Token struct {
