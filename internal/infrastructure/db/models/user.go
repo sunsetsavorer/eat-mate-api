@@ -3,7 +3,7 @@ package models
 import (
 	"database/sql"
 
-	"github.com/sunsetsavorer/eat-mate-api/internal/domains/user/entities"
+	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
 	"github.com/sunsetsavorer/eat-mate-api/pkg/nullable"
 )
 

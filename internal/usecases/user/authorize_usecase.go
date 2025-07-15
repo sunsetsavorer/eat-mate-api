@@ -1,18 +1,17 @@
-package usecases
+package user
 
 import (
-	"github.com/sunsetsavorer/eat-mate-api/internal/domains/user/dtos"
-	"github.com/sunsetsavorer/eat-mate-api/internal/domains/user/entities"
-	"github.com/sunsetsavorer/eat-mate-api/internal/domains/user/interfaces"
+	"github.com/sunsetsavorer/eat-mate-api/internal/dtos"
+	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
 	"github.com/sunsetsavorer/eat-mate-api/pkg/jwt"
 )
 
 type AuthorizeUseCase struct {
-	UserRepository interfaces.UserRepositoryInterface
+	UserRepository UserRepositoryInterface
 }
 
 func NewAuthorizeUseCase(
-	userRepository interfaces.UserRepositoryInterface,
+	userRepository UserRepositoryInterface,
 ) *AuthorizeUseCase {
 
 	return &AuthorizeUseCase{
@@ -20,7 +19,7 @@ func NewAuthorizeUseCase(
 	}
 }
 
-func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (string, error) {
+func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 
 	user, err := uc.UserRepository.GetByID(dto.GetUserID())
 	if err != nil {
@@ -32,7 +31,7 @@ func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (string, error) {
 
 		err := uc.UserRepository.Create(user)
 		if err != nil {
-			return "", err
+			return TokenResponse{}, err
 		}
 	}
 
@@ -42,8 +41,8 @@ func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (string, error) {
 		dto.GetTokenLifetime(),
 	)
 	if err != nil {
-		return "", err
+		return TokenResponse{}, err
 	}
 
-	return token.Value, nil
+	return TokenResponse{token.Value}, nil
 }

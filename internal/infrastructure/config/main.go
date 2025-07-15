@@ -21,6 +21,8 @@ func NewConfig() *Config {
 
 func (cfg *Config) LoadConfig() error {
 
+	cfg.setDefaults()
+
 	viper.SetConfigFile("config/.env")
 
 	if err := viper.ReadInConfig(); err != nil {

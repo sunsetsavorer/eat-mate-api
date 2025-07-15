@@ -1,9 +1,9 @@
-package user
+package repositories
 
 import (
 	"fmt"
 
-	"github.com/sunsetsavorer/eat-mate-api/internal/domains/user/entities"
+	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db/models"
 )
