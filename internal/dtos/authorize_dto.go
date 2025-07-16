@@ -1,13 +1,9 @@
 package dtos
 
-import "time"
-
 type AuthorizeDTO struct {
-	UserID        int64
-	UserName      string
-	UserPhotoURL  *string
-	TokenSecret   string
-	TokenLifetime time.Duration
+	UserID       int64
+	UserName     string
+	UserPhotoURL *string
 }
 
 func (dto AuthorizeDTO) GetUserID() int64 {
@@ -20,12 +16,4 @@ func (dto AuthorizeDTO) GetUserName() string {
 
 func (dto AuthorizeDTO) GetUserPhotoURL() *string {
 	return dto.UserPhotoURL
-}
-
-func (dto AuthorizeDTO) GetTokenSecret() string {
-	return dto.TokenSecret
-}
-
-func (dto AuthorizeDTO) GetTokenLifetime() time.Duration {
-	return dto.TokenLifetime
 }

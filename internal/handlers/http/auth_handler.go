@@ -46,11 +46,9 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 	}
 
 	dto := dtos.AuthorizeDTO{
-		UserID:        req.UserID,
-		UserName:      req.UserName,
-		UserPhotoURL:  req.UserPhotoURL,
-		TokenSecret:   hdlr.config.JWT.Secret,
-		TokenLifetime: time.Hour * 24,
+		UserID:       req.UserID,
+		UserName:     req.UserName,
+		UserPhotoURL: req.UserPhotoURL,
 	}
 
 	userRepository := repositories.NewUserRepository(hdlr.db)
