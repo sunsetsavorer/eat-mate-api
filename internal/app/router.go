@@ -10,7 +10,7 @@ import (
 
 func (app App) InitRouter() *gin.Engine {
 
-	if !app.config.Debug {
+	if !app.config.App.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
@@ -18,7 +18,7 @@ func (app App) InitRouter() *gin.Engine {
 	router.Use(
 		cors.New(
 			cors.Config{
-				AllowOrigins:     app.config.AllowOrigins,
+				AllowOrigins:     app.config.App.AllowOrigins,
 				AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH"},
 				AllowHeaders:     []string{"Content-Type", "Content-Length", "Accept-Encoding", "Authorization", "Cache-Control"},
 				ExposeHeaders:    []string{"Content-Length"},

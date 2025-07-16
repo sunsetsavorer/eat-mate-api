@@ -4,6 +4,7 @@ import "github.com/spf13/viper"
 
 func (cfg *Config) setDefaults() {
 
-	// Here we set config variables default values
-	viper.SetDefault("AllowOrigins", []string{"http://localhost:3000"})
+	viper.SetDefault("APP.PORT", "8080")
+	viper.SetDefault("APP.DEBUG", true)
+	viper.SetDefault("APP.DBCONN", "")
 }

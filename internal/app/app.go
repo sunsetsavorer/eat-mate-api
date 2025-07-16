@@ -33,7 +33,7 @@ func (app *App) InitInfrastructure() {
 
 	app.config = config
 
-	db, err := db.NewDB(app.config.DbConn)
+	db, err := db.NewDB(app.config.App.DbConn)
 
 	if err != nil {
 		app.logger.Errorf("db connection error: %v", err)
@@ -46,7 +46,7 @@ func (app App) ExecAndLoop() {
 
 	router := app.InitRouter()
 
-	srv := server.NewServer(app.config.AppPort, router)
+	srv := server.NewServer(app.config.App.Port, router)
 
 	err := srv.Start()
 

@@ -1,0 +1,9 @@
+APP:
+    PORT: 8080
+    Debug: true
+    ALLOWORIGINS:
+        - http://localhost:3000
+    DBCONN: "connection string"
+JWT:
+    SECRET: "token secret"
+    LIFETIMEINMINUTES: 30

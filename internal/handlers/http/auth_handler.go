@@ -43,14 +43,14 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 		UserID:        req.UserID,
 		UserName:      req.UserName,
 		UserPhotoURL:  req.UserPhotoURL,
-		TokenSecret:   hdlr.config.JWTSecret,
+		TokenSecret:   hdlr.config.JWT.Secret,
 		TokenLifetime: time.Hour * 24,
 	}
 
 	userRepository := repositories.NewUserRepository(hdlr.db)
 	jwtService := services.NewJWTService(
-		hdlr.config.JWTSecret,
-		time.Minute*30,
+		hdlr.config.JWT.Secret,
+		time.Minute*hdlr.config.JWT.LifetimeInMinutes,
 	)
 
 	uc := user.NewAuthorizeUseCase(

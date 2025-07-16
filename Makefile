@@ -1,5 +1,4 @@
 MIGRATIONS_PATH = internal/infrastructure/db/migrations
-DSN = postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable
 
 include config/.env
 
@@ -10,10 +9,10 @@ migration.new:
 	migrate create -seq -ext sql -dir $(MIGRATIONS_PATH) $(name)
 
 migration.up:
-	migrate -verbose -database $(DSN) -path $(MIGRATIONS_PATH) up
+	migrate -verbose -database $(DBCONN) -path $(MIGRATIONS_PATH) up
 
 migration.goto:
-	migrate -database $(DSN) -path $(MIGRATIONS_PATH) goto $(version)
+	migrate -database $(DBCONN) -path $(MIGRATIONS_PATH) goto $(version)
 
 migration.version:
-	migrate -database $(DSN) -path $(MIGRATIONS_PATH) version
+	migrate -database $(DBCONN) -path $(MIGRATIONS_PATH) version

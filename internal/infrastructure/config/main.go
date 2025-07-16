@@ -2,16 +2,22 @@ package config
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	AppPort      string
-	Debug        bool
-	AllowOrigins []string
-	DbConn       string
-	JWTSecret    string
+	App struct {
+		Port         string
+		Debug        bool
+		AllowOrigins []string
+		DbConn       string
+	}
+	JWT struct {
+		Secret            string
+		LifetimeInMinutes time.Duration
+	}
 }
 
 func NewConfig() *Config {
@@ -23,7 +29,7 @@ func (cfg *Config) LoadConfig() error {
 
 	cfg.setDefaults()
 
-	viper.SetConfigFile("config/.env")
+	viper.SetConfigFile("config/config.yml")
 
 	if err := viper.ReadInConfig(); err != nil {
 		return fmt.Errorf("failed to read config: %v", err)
