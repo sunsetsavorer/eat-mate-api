@@ -90,43 +90,43 @@ components:
         - name
 
   examples:
-    BadRequestErrorResponseExample:
+    BadRequestErrorResponse:
       value:
         errors:
           other: 'bad request'
 
-    NotAuthorizedErrorResponseExample:
+    NotAuthorizedErrorResponse:
       value:
         errors:
           other: 'not authorized'
 
-    NotFoundErrorResponseExample:
+    NotFoundErrorResponse:
       value:
         errors:
           other: 'not found'
 
-    ValidationErrorResponseExample:
+    ValidationErrorResponse:
       value:
         errors:
           field1: 'this field is required'
           field2: 'this field has wrong format'
 
-    EmptySuccessResponseExample:
+    EmptySuccessResponse:
       value:
         data: {}
 
-    SigninRequestBodyExample:
+    SigninRequestBody:
       value:
         telegram_id: 576098928
         name: 'sunsetsavorer'
         photo_url: 'https://example.com/avatars/sunsetsavorer.svg'
 
-    SigninResponseExample:
+    SigninResponse:
       value:
         data:
           token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30'
 
-    UpdateUserRequestBodyExample:
+    UpdateUserRequestBody:
       value:
         name: 'updated_sunsetsavorer'
         photo_url: 'https://example.com/avatars/updated_sunsetsavorer.svg'
@@ -140,7 +140,7 @@ components:
             $ref: '#/components/schemas/SigninRequestBody'
           examples:
             Base:
-              $ref: '#/components/examples/SigninRequestBodyExample'
+              $ref: '#/components/examples/SigninRequestBody'
 
     UpdateUser:
       required: true
@@ -150,7 +150,7 @@ components:
             $ref: '#/components/schemas/UpdateUserRequestBody'
           examples:
             Base:
-              $ref: '#/components/examples/UpdateUserRequestBodyExample'
+              $ref: '#/components/examples/UpdateUserRequestBody'
 
   responses:
     BadRequestError:
@@ -161,7 +161,7 @@ components:
             $ref: '#/components/schemas/BaseErrorResponse'
           examples:
             Base:
-              $ref: '#/components/examples/BadRequestErrorResponseExample'
+              $ref: '#/components/examples/BadRequestErrorResponse'
 
     NotAuthorizedError:
       description: 'not authorized error response'
@@ -171,7 +171,7 @@ components:
             $ref: '#/components/schemas/BaseErrorResponse'
           examples:
             Base:
-              $ref: '#/components/examples/NotAuthorizedErrorResponseExample'
+              $ref: '#/components/examples/NotAuthorizedErrorResponse'
 
     NotFoundError:
       description: 'not found error response'
@@ -181,7 +181,7 @@ components:
             $ref: '#/components/schemas/BaseErrorResponse'
           examples:
             Base:
-              $ref: '#/components/examples/NotFoundErrorResponseExample'
+              $ref: '#/components/examples/NotFoundErrorResponse'
 
     ValidationError:
       description: 'validation error response'
@@ -191,7 +191,7 @@ components:
             $ref: '#/components/schemas/BaseErrorResponse'
           examples:
             Base:
-              $ref: '#/components/examples/ValidationErrorResponseExample'
+              $ref: '#/components/examples/ValidationErrorResponse'
 
     EmptySuccess:
       description: 'empty success response'
@@ -201,7 +201,7 @@ components:
             $ref: '#/components/schemas/EmptySuccessResponse'
           examples:
             Base:
-              $ref: '#/components/examples/EmptySuccessResponseExample'
+              $ref: '#/components/examples/EmptySuccessResponse'
 
     Signin:
       description: 'success authorization'
@@ -211,7 +211,7 @@ components:
             $ref: '#/components/schemas/SigninResponse'
           examples:
             Base:
-              $ref: '#/components/examples/SigninResponseExample'
+              $ref: '#/components/examples/SigninResponse'
 
   securitySchemes:
     JWT:
