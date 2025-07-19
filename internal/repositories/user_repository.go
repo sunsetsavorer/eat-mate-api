@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+
 	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db"
@@ -45,6 +47,31 @@ func (r UserRepository) Create(entity entities.UserEntity) error {
 
 	if err != nil {
 		return exceptions.NewRepositoryError(err)
+	}
+
+	return nil
+}
+
+func (r UserRepository) Update(entity entities.UserEntity) error {
+
+	var user models.UserModel
+
+	err := r.db.Client.
+		First(&user, entity.GetID()).
+		Error
+
+	if err != nil {
+		return exceptions.NewNotFoundError(fmt.Errorf("user with specified id was not found"))
+	}
+
+	user.FromEntity(entity)
+
+	err = r.db.Client.
+		Save(&user).
+		Error
+
+	if err != nil {
+		return exceptions.NewRepositoryError(fmt.Errorf("failed to update user"))
 	}
 
 	return nil

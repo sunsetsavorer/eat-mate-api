@@ -6,5 +6,6 @@ type (
 	UserRepositoryInterface interface {
 		GetByID(ID int64) (entities.UserEntity, error)
 		Create(entity entities.UserEntity) error
+		Update(entity entities.UserEntity) error
 	}
 )
