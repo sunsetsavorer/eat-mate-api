@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sunsetsavorer/eat-mate-api/internal/dtos"
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
+	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/httpresp"
 	"github.com/sunsetsavorer/eat-mate-api/internal/repositories"
 	"github.com/sunsetsavorer/eat-mate-api/internal/services"
 	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/user"
@@ -38,7 +39,7 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 	if err != nil {
 		hdlr.logger.Errorf("failed to bind `authorize` request: %v", err)
 		c.JSON(
-			hdlr.getError(
+			httpresp.GetError(
 				exceptions.NewBadRequestError(fmt.Errorf("failed to bind request")),
 			),
 		)
@@ -66,9 +67,9 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 	token, err := uc.Exec(dto)
 	if err != nil {
 		hdlr.logger.Errorf("get error from `authorize` usecase: %v", err)
-		c.JSON(hdlr.getError(err))
+		c.JSON(httpresp.GetError(err))
 		return
 	}
 
-	c.JSON(http.StatusOK, SuccessDataResp{token})
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: token})
 }
