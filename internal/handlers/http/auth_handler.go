@@ -46,6 +46,14 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 		return
 	}
 
+	if invalid := hdlr.validator.Struct(req); invalid != nil {
+		hdlr.logger.Errorf("`authorize` request validation error: %v", err)
+		c.JSON(
+			httpresp.GetError(invalid),
+		)
+		return
+	}
+
 	dto := dtos.AuthorizeDTO{
 		UserID:       req.UserID,
 		UserName:     req.UserName,

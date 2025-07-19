@@ -15,6 +15,12 @@ func GetError(err error) (int, any) {
 		}
 	}
 
+	if _, ok := err.(*exceptions.ValidationError); ok {
+		return http.StatusUnprocessableEntity, ErrorResp[map[string]string]{
+			Errors: err.(*exceptions.ValidationError).Errors(),
+		}
+	}
+
 	if _, ok := err.(*exceptions.NotFoundError); ok {
 		return http.StatusNotFound, ErrorResp[OtherError]{
 			Errors: OtherError{err.Error()},
