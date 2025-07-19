@@ -115,7 +115,7 @@ components:
 
     EmptySuccessResponse:
       value:
-        data: {}
+        data: null
 
     SigninRequestBody:
       value:
