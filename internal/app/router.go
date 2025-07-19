@@ -36,7 +36,10 @@ func (app App) InitRouter() *gin.Engine {
 
 	v1 := router.Group("v1")
 	{
-		userHdlr := http.NewAuthHandler(baseHdlr)
+		authHdlr := http.NewAuthHandler(baseHdlr)
+		authHdlr.RegisterRoutes(v1)
+
+		userHdlr := http.NewUserHandler(baseHdlr)
 		userHdlr.RegisterRoutes(v1)
 	}
 
