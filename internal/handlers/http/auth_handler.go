@@ -55,9 +55,9 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 	}
 
 	dto := dtos.AuthorizeDTO{
-		UserID:       req.UserID,
-		UserName:     req.UserName,
-		UserPhotoURL: req.UserPhotoURL,
+		TelegramID: req.TelegramID,
+		Name:       req.Name,
+		PhotoURL:   req.PhotoURL,
 	}
 
 	userRepository := repositories.NewUserRepository(hdlr.db)

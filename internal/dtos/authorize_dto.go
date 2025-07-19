@@ -1,19 +1,19 @@
 package dtos
 
 type AuthorizeDTO struct {
-	UserID       int64
-	UserName     string
-	UserPhotoURL *string
+	TelegramID int64
+	Name       string
+	PhotoURL   *string
 }
 
-func (dto AuthorizeDTO) GetUserID() int64 {
-	return dto.UserID
+func (dto AuthorizeDTO) GetTelegramID() int64 {
+	return dto.TelegramID
 }
 
-func (dto AuthorizeDTO) GetUserName() string {
-	return dto.UserName
+func (dto AuthorizeDTO) GetName() string {
+	return dto.Name
 }
 
-func (dto AuthorizeDTO) GetUserPhotoURL() *string {
-	return dto.UserPhotoURL
+func (dto AuthorizeDTO) GetPhotoURL() *string {
+	return dto.PhotoURL
 }

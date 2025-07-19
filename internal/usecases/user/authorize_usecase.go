@@ -30,12 +30,12 @@ func NewAuthorizeUseCase(
 
 func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 
-	user, err := uc.userRepository.GetByID(dto.GetUserID())
+	user, err := uc.userRepository.GetByID(dto.GetTelegramID())
 	if err != nil {
 		user = entities.UserEntity{
-			ID:       dto.GetUserID(),
-			Name:     dto.GetUserName(),
-			PhotoURL: dto.GetUserPhotoURL(),
+			ID:       dto.GetTelegramID(),
+			Name:     dto.GetName(),
+			PhotoURL: dto.GetPhotoURL(),
 		}
 
 		err := uc.userRepository.Create(user)
