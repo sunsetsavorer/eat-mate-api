@@ -7,12 +7,14 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/logger"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/server"
+	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/validator"
 )
 
 type App struct {
-	db     *db.Db
-	config *config.Config
-	logger *logger.Logger
+	db        *db.Db
+	config    *config.Config
+	logger    *logger.Logger
+	validator *validator.Validator
 }
 
 func NewApp() *App {
@@ -40,6 +42,8 @@ func (app *App) InitInfrastructure() {
 	}
 
 	app.db = db
+
+	app.validator = validator.NewValidator()
 }
 
 func (app App) ExecAndLoop() {

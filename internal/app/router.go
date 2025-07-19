@@ -32,6 +32,7 @@ func (app App) InitRouter() *gin.Engine {
 		app.db,
 		app.config,
 		app.logger,
+		app.validator,
 	)
 
 	v1 := router.Group("v1")
