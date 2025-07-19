@@ -29,10 +29,10 @@ func (mv AuthMiddleware) Check(c *gin.Context) {
 
 	token := c.GetHeader("Authorization")
 
-	_, err := mv.jwtService.ParseToken(token)
+	tokenStruct, err := mv.jwtService.ParseToken(token)
 	if err != nil {
 		mv.log.Errorf("get error while validating token: %v, %v", token, err)
-		c.JSON(
+		c.AbortWithStatusJSON(
 			httpresp.GetError(exceptions.NewUnauthorizedError(
 				fmt.Errorf("unauthorized"),
 			)),
@@ -40,5 +40,6 @@ func (mv AuthMiddleware) Check(c *gin.Context) {
 		return
 	}
 
+	c.Set("user_id", tokenStruct.Payload.UserID)
 	c.Next()
 }
