@@ -33,5 +33,11 @@ func GetError(err error) (int, any) {
 		}
 	}
 
+	if _, ok := err.(*exceptions.UnauthorizedError); ok {
+		return http.StatusUnauthorized, ErrorResp[OtherError]{
+			Errors: OtherError{err.Error()},
+		}
+	}
+
 	return http.StatusBadRequest, fmt.Errorf("unknow response")
 }
