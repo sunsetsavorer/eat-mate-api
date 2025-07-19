@@ -11,6 +11,8 @@ info:
 tags:
   - name: 'Auth'
     description: 'authorization operations'
+  - name: 'User'
+    description: 'user operations'
 
 paths:
   /v1/auth/signin:
@@ -23,9 +25,40 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/Signin'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+
+  /v1/users/me:
+    put:
+      summary: 'update user information'
+      tags:
+        - User
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        200:
+          $ref: '#/components/responses/EmptySuccess'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+        401:
+          $ref: '#/components/responses/NotAuthorizedError'
+        422:
+          $ref: '#/components/responses/ValidationError'
+      security:
+        - JWT: []
 
 components:
   schemas:
+    BaseErrorResponse:
+      type: object
+      properties:
+        errors: {type: object}
+
+    EmptySuccessResponse:
+      type: object
+      properties:
+        data: {type: object}
+
     JWTToken:
       type: string
 
@@ -48,7 +81,40 @@ components:
             token:
               $ref: '#/components/schemas/JWTToken'
 
+    UpdateUserRequestBody:
+      type: object
+      properties:
+        name: {type: string}
+        photo_url: {type: string}
+      required:
+        - name
+
   examples:
+    BadRequestErrorResponseExample:
+      value:
+        errors:
+          other: 'bad request'
+
+    NotAuthorizedErrorResponseExample:
+      value:
+        errors:
+          other: 'not authorized'
+
+    NotFoundErrorResponseExample:
+      value:
+        errors:
+          other: 'not found'
+
+    ValidationErrorResponseExample:
+      value:
+        errors:
+          field1: 'this field is required'
+          field2: 'this field has wrong format'
+
+    EmptySuccessResponseExample:
+      value:
+        data: {}
+
     SigninRequestBodyExample:
       value:
         telegram_id: 576098928
@@ -59,6 +125,11 @@ components:
       value:
         data:
           token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30'
+
+    UpdateUserRequestBodyExample:
+      value:
+        name: 'updated_sunsetsavorer'
+        photo_url: 'https://example.com/avatars/updated_sunsetsavorer.svg'
 
   requestBodies:
     Signin:
@@ -71,7 +142,67 @@ components:
             Base:
               $ref: '#/components/examples/SigninRequestBodyExample'
 
+    UpdateUser:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateUserRequestBody'
+          examples:
+            Base:
+              $ref: '#/components/examples/UpdateUserRequestBodyExample'
+
   responses:
+    BadRequestError:
+      description: 'bad request error response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/BadRequestErrorResponseExample'
+
+    NotAuthorizedError:
+      description: 'not authorized error response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/NotAuthorizedErrorResponseExample'
+
+    NotFoundError:
+      description: 'not found error response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/NotFoundErrorResponseExample'
+
+    ValidationError:
+      description: 'validation error response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/ValidationErrorResponseExample'
+
+    EmptySuccess:
+      description: 'empty success response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmptySuccessResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/EmptySuccessResponseExample'
+
     Signin:
       description: 'success authorization'
       content:
