@@ -41,7 +41,7 @@ paths:
         400:
           $ref: '#/components/responses/BadRequestError'
         401:
-          $ref: '#/components/responses/NotAuthorizedError'
+          $ref: '#/components/responses/UnauthorizedError'
         422:
           $ref: '#/components/responses/ValidationError'
       security:
@@ -95,7 +95,7 @@ components:
         errors:
           other: 'bad request'
 
-    NotAuthorizedErrorResponse:
+    UnauthorizedErrorResponse:
       value:
         errors:
           other: 'not authorized'
@@ -163,7 +163,7 @@ components:
             Base:
               $ref: '#/components/examples/BadRequestErrorResponse'
 
-    NotAuthorizedError:
+    UnauthorizedError:
       description: 'not authorized error response'
       content:
         application/json:
@@ -171,7 +171,7 @@ components:
             $ref: '#/components/schemas/BaseErrorResponse'
           examples:
             Base:
-              $ref: '#/components/examples/NotAuthorizedErrorResponse'
+              $ref: '#/components/examples/UnauthorizedErrorResponse'
 
     NotFoundError:
       description: 'not found error response'
