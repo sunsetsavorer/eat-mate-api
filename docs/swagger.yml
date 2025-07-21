@@ -17,7 +17,7 @@ tags:
     description: 'place branch operations'
 
 paths:
-  /v1/auth/signin:
+  /v1/auth/signin/:
     post:
       summary: 'return JWT token'
       tags:
@@ -32,7 +32,7 @@ paths:
         422:
           $ref: '#/components/responses/ValidationError'
 
-  /v1/users/me:
+  /v1/users/me/:
     put:
       summary: 'update user'
       tags:
