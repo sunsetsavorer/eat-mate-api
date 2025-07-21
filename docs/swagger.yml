@@ -13,6 +13,8 @@ tags:
     description: 'authorization operations'
   - name: 'User'
     description: 'user operations'
+  - name: 'PlaceBranch'
+    description: 'place branch operations'
 
 paths:
   /v1/auth/signin:
@@ -32,7 +34,7 @@ paths:
 
   /v1/users/me:
     put:
-      summary: 'update user information'
+      summary: 'update user'
       tags:
         - User
       requestBody:
@@ -49,6 +51,15 @@ paths:
       security:
         - JWT: []
 
+  /v1/place_branches/:
+    get:
+      summary: 'get place branches'
+      tags:
+        - PlaceBranch
+      responses:
+        200:
+          $ref: '#/components/responses/GetPlaceBranches'
+
 components:
   schemas:
     BaseErrorResponse:
@@ -60,9 +71,6 @@ components:
       type: object
       properties:
         data: {type: object}
-
-    JWTToken:
-      type: string
 
     SigninRequestBody:
       type: object
@@ -83,6 +91,9 @@ components:
             token:
               $ref: '#/components/schemas/JWTToken'
 
+    JWTToken:
+      type: string
+
     UpdateUserRequestBody:
       type: object
       properties:
@@ -90,6 +101,24 @@ components:
         photo_url: {type: string}
       required:
         - name
+
+    GetPlaceBranchesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceBranchesResponseItem'
+
+    PlaceBranchesResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        icon_path: {type: string}
+        name: {type: string}
+        address: {type: string}
 
   examples:
     BadRequestErrorResponse:
@@ -132,6 +161,20 @@ components:
       value:
         name: 'updated_sunsetsavorer'
         photo_url: 'https://example.com/avatars/updated_sunsetsavorer.svg'
+
+    GetPlaceBranchesResponse:
+      value:
+        data:
+          - id: '6310cc48-4833-46c9-9464-da30ec2b117f'
+            icon_path: '/icons/place_branches/kfc.svg'
+            name: 'KFC'
+            address: 'Pr Dovatora'
+            contact_phone: '8 (800) 535-35-35'
+          - id: '8c92f3ea-449a-4c40-a84e-03dd9fbdac59'
+            icon_path: null
+            name: 'Siria Bistro'
+            address: 'Vladikavkazskaya Ulitsa, 35'
+            contact_phone: '8 (918) 826-94-54'
 
   requestBodies:
     Signin:
@@ -214,6 +257,16 @@ components:
           examples:
             Base:
               $ref: '#/components/examples/SigninResponse'
+
+    GetPlaceBranches:
+      description: 'success request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetPlaceBranchesResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/GetPlaceBranchesResponse'
 
   securitySchemes:
     JWT:
