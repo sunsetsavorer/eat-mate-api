@@ -15,4 +15,11 @@ type (
 		UserID int64 `json:"user_id"`
 		Exp    int64 `json:"exp"`
 	}
+
+	PaginationResponse struct {
+		CurrentPage int `json:"page"`
+		NextPage    int `json:"next_page"`
+		LastPage    int `json:"last_page"`
+		Limit       int `json:"limit"`
+	}
 )
