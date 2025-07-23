@@ -59,9 +59,33 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/GetPlaceBranches'
+      parameters:
+        - $ref: '#/components/schemas/PaginationPageQueryParameter'
+        - $ref: '#/components/schemas/PaginationLimitQueryParameter'
+        - $ref: '#/components/schemas/SearchQueryParameter'
 
 components:
   schemas:
+    PaginationPageQueryParameter:
+      in: query
+      name: page
+      required: true
+      schema:
+        type: integer
+
+    PaginationLimitQueryParameter:
+      in: query
+      name: page
+      required: true
+      schema:
+        type: integer
+
+    SearchQueryParameter:
+      in: query
+      name: query
+      schema:
+        type: string
+
     BaseErrorResponse:
       type: object
       properties:
@@ -102,13 +126,27 @@ components:
       required:
         - name
 
+    PaginationResponse:
+      type: object
+      properties:
+        page: {type: number}
+        next_page: {type: number}
+        last_page: {type: number}
+        limit: {type:number}
+
     GetPlaceBranchesResponse:
       type: object
       properties:
         data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaceBranchesResponseItem'
+          type: object
+          properties:
+            place_branches:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlaceBranchesResponseItem'
+            pagination:
+              type: object
+              $ref: '#/components/schemas/PaginationResponse'
 
     PlaceBranchesResponseItem:
       type: object
@@ -165,16 +203,22 @@ components:
     GetPlaceBranchesResponse:
       value:
         data:
-          - id: '6310cc48-4833-46c9-9464-da30ec2b117f'
-            icon_path: '/icons/place_branches/kfc.svg'
-            name: 'KFC'
-            address: 'Pr Dovatora'
-            contact_phone: '8 (800) 535-35-35'
-          - id: '8c92f3ea-449a-4c40-a84e-03dd9fbdac59'
-            icon_path: null
-            name: 'Siria Bistro'
-            address: 'Vladikavkazskaya Ulitsa, 35'
-            contact_phone: '8 (918) 826-94-54'
+          place_branches:
+            - id: '6310cc48-4833-46c9-9464-da30ec2b117f'
+              icon_path: '/icons/place_branches/kfc.svg'
+              name: 'KFC'
+              address: 'Pr Dovatora'
+              contact_phone: '8 (800) 535-35-35'
+            - id: '8c92f3ea-449a-4c40-a84e-03dd9fbdac59'
+              icon_path: null
+              name: 'Siria Bistro'
+              address: 'Vladikavkazskaya Ulitsa, 35'
+              contact_phone: '8 (918) 826-94-54'
+          pagination:
+            limit: 8
+            page: 1
+            next_page: 2
+            last_page: 10
 
   requestBodies:
     Signin:
