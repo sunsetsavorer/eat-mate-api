@@ -21,8 +21,8 @@ Table place_branches {
 Table groups {
   id uuid [pk]
   name string [not null]
-  owner_id bigint [ref: - users.id]
   is_public bool [default: true]
+  is_active bool [default: true]
   selection_mode selection_mode [not null]
   place_branch_id uuid [null, ref: - place_branches.id]
 }
@@ -30,6 +30,7 @@ Table groups {
 Table group_members {
   group_id uuid [ref: - groups.id]
   user_id bigint [ref: - users.id]
+  role group_member_role [not null]
 }
 
 Table votes {
@@ -47,4 +48,9 @@ Enum selection_mode {
   defined
   voting
   random
+}
+
+Enum group_member_role {
+  owner
+  participant
 }
