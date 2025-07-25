@@ -1,0 +1,1 @@
+CREATE TYPE group_mode AS ENUM ('defined', 'voting', 'random');

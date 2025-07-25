@@ -1,0 +1,1 @@
+CREATE TYPE group_member_role AS ENUM ('owner', 'participant');
