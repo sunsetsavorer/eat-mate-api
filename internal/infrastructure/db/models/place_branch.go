@@ -33,13 +33,8 @@ func (m PlaceBranchModel) ToEntity() entities.PlaceBranchEntity {
 
 func (m *PlaceBranchModel) FromEntity(e entities.PlaceBranchEntity) {
 
-	var place PlaceModel
-
-	place.FromEntity(e.GetPlace())
-
 	m.ID = e.GetID()
 	m.PlaceID = e.GetPlaceID()
-	m.Place = place
 	m.Address = nullable.PtrToNullString(e.GetAddress())
 	m.ContactPhone = nullable.PtrToNullString(e.GetContactPhone())
 }
