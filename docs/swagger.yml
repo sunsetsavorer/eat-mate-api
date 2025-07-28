@@ -177,7 +177,7 @@ components:
         name: {type: string}
         selection_mode: {type: string}
         is_public: {type: boolean}
-        place_options:
+        place_branch_options:
           type: array
           items:
             $ref: '#/components/schemas/GroupPlaceBranchOption'
@@ -285,7 +285,7 @@ components:
         name: 'Voting group'
         selection_mode: 'voting'
         is_public: true
-        place_options:
+        place_branch_options:
           - '059c0f25-500e-47aa-84bd-6baefc8bb0e5'
           - '44473945-2bf4-407d-b943-4fadf091eb34'
           - '834ac556-35c3-45f7-a605-52694d5039eb'
@@ -297,7 +297,7 @@ components:
         name: 'Random group'
         selection_mode: 'random'
         is_public: true
-        place_options:
+        place_branch_options:
           - '059c0f25-500e-47aa-84bd-6baefc8bb0e5'
           - '44473945-2bf4-407d-b943-4fadf091eb34'
           - '834ac556-35c3-45f7-a605-52694d5039eb'
