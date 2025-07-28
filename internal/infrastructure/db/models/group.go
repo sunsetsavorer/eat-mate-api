@@ -6,7 +6,7 @@ import (
 )
 
 type GroupModel struct {
-	ID                 uuid.UUID          `gorm:"column:id;primaryKey"`
+	ID                 uuid.UUID          `gorm:"column:id;default:gen_random_uuid();primaryKey"`
 	Name               string             `gorm:"column:name;not null"`
 	IsPublic           bool               `gorm:"column:is_public"`
 	IsActive           bool               `gorm:"column:is_active"`
