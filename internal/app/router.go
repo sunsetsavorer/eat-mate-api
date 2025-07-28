@@ -45,6 +45,9 @@ func (app App) InitRouter() *gin.Engine {
 
 		placeBranchHdlr := http.NewPlaceBranchHandler(baseHdlr)
 		placeBranchHdlr.RegisterRoutes(v1)
+
+		groupHdlr := http.NewGroupHandler(baseHdlr)
+		groupHdlr.RegisterRoutes(v1)
 	}
 
 	return router
