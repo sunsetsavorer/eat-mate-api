@@ -1,7 +1,7 @@
 package http
 
 type AuthorizeRequest struct {
-	TelegramID int64   `form:"telegram_id" validate:"required"`
-	Name       string  `form:"name" validate:"required"`
-	PhotoURL   *string `form:"photo_url"`
+	TelegramID int64   `json:"telegram_id" validate:"required"`
+	Name       string  `json:"name" validate:"required"`
+	PhotoURL   *string `json:"photo_url"`
 }

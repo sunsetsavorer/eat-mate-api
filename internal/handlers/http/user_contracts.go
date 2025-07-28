@@ -2,7 +2,7 @@ package http
 
 type (
 	UpdateUserRequest struct {
-		Name     string  `form:"name" validate:"required"`
-		PhotoURL *string `form:"photo_url"`
+		Name     string  `json:"name" validate:"required"`
+		PhotoURL *string `json:"photo_url"`
 	}
 )
