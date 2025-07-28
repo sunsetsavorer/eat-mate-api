@@ -6,7 +6,7 @@ type CreateGroupDTO struct {
 	Name               string
 	SelectionMode      string
 	IsPublic           bool
-	PlaceBranchID      uuid.UUID
+	PlaceBranchID      uuid.NullUUID
 	PlaceBranchOptions []uuid.UUID
 	OwnerID            int64
 }
@@ -23,7 +23,7 @@ func (dto CreateGroupDTO) GetIsPublic() bool {
 	return dto.IsPublic
 }
 
-func (dto CreateGroupDTO) GetPlaceBranchID() uuid.UUID {
+func (dto CreateGroupDTO) GetPlaceBranchID() uuid.NullUUID {
 	return dto.PlaceBranchID
 }
 
