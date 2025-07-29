@@ -82,11 +82,13 @@ func (hdlr GroupHdlr) createAction(c *gin.Context) {
 		OwnerID:            userID,
 	}
 
-	repo := repositories.NewGroupRepository(hdlr.db)
+	groupRepo := repositories.NewGroupRepository(hdlr.db)
+	userRepo := repositories.NewUserRepository(hdlr.db)
 
 	uc := group.NewCreateGroupUseCase(
 		hdlr.logger,
-		repo,
+		groupRepo,
+		userRepo,
 	)
 
 	res, err := uc.Exec(dto)
