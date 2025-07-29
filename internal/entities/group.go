@@ -11,6 +11,7 @@ type GroupEntity struct {
 	PlaceBranchID      uuid.NullUUID       `json:"place_branch_id"`
 	PlaceBranch        PlaceBranchEntity   `json:"place_branch"`
 	PlaceBranchOptions []PlaceBranchEntity `json:"place_branch_options"`
+	Members            []GroupMemberEntity `json:"members"`
 }
 
 func (e GroupEntity) GetID() uuid.UUID {
@@ -75,4 +76,12 @@ func (e GroupEntity) GetPlaceBranchOptions() []PlaceBranchEntity {
 
 func (e *GroupEntity) SetPlaceBranchOptions(v []PlaceBranchEntity) {
 	e.PlaceBranchOptions = v
+}
+
+func (e GroupEntity) GetMembers() []GroupMemberEntity {
+	return e.Members
+}
+
+func (e *GroupEntity) SetMembers(v []GroupMemberEntity) {
+	e.Members = v
 }

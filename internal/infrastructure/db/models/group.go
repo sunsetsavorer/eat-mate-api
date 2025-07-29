@@ -14,6 +14,7 @@ type GroupModel struct {
 	PlaceBranchID      uuid.NullUUID      `gorm:"column:place_branch_id"`
 	PlaceBranch        PlaceBranchModel   `gorm:"foreignKey:PlaceBranchID"`
 	PlaceBranchOptions []PlaceBranchModel `gorm:"many2many:group_place_options;joinForeignKey:group_id;joinReferences:place_branch_id"`
+	Members            []GroupMemberModel `gorm:"foreignKey:GroupID"`
 }
 
 func (GroupModel) TableName() string {
@@ -28,6 +29,12 @@ func (m GroupModel) ToEntity() entities.GroupEntity {
 		options[i] = e.ToEntity()
 	}
 
+	members := make([]entities.GroupMemberEntity, len(m.Members))
+
+	for i, e := range m.Members {
+		members[i] = e.ToEntity()
+	}
+
 	return entities.GroupEntity{
 		ID:                 m.ID,
 		Name:               m.Name,
@@ -37,6 +44,7 @@ func (m GroupModel) ToEntity() entities.GroupEntity {
 		PlaceBranchID:      m.PlaceBranchID,
 		PlaceBranch:        m.PlaceBranch.ToEntity(),
 		PlaceBranchOptions: options,
+		Members:            members,
 	}
 }
 
