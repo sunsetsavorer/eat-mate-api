@@ -18,6 +18,24 @@ func NewUserRepository(db *db.Db) *UserRepository {
 	return &UserRepository{db}
 }
 
+func (r UserRepository) IsInAnyGroup(ID int64) (bool, error) {
+
+	var count int64
+
+	query := r.db.Client.
+		Model(&models.GroupModel{}).
+		Joins("Members").
+		Where("\"groups\".\"is_active\" = ?", true).
+		Where("\"Members\".\"user_id\" = ?", ID)
+
+	err := query.Count(&count).Error
+	if err != nil {
+		return false, exceptions.NewRepositoryError(err)
+	}
+
+	return count > 0, nil
+}
+
 func (r UserRepository) GetByID(ID int64) (entities.UserEntity, error) {
 
 	var user models.UserModel
