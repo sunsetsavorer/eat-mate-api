@@ -9,33 +9,33 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/httpresp"
 	"github.com/sunsetsavorer/eat-mate-api/internal/repositories"
-	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/place"
+	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/branch"
 )
 
-type PlaceBranchHdlr struct {
+type BranchHdlr struct {
 	*BaseHdlr
 }
 
-func NewPlaceBranchHandler(baseHdlr *BaseHdlr) *PlaceBranchHdlr {
+func NewBranchHandler(baseHdlr *BaseHdlr) *BranchHdlr {
 
-	return &PlaceBranchHdlr{baseHdlr}
+	return &BranchHdlr{baseHdlr}
 }
 
-func (hdlr PlaceBranchHdlr) RegisterRoutes(router *gin.RouterGroup) {
+func (hdlr BranchHdlr) RegisterRoutes(router *gin.RouterGroup) {
 
-	placeBranch := router.Group("place_branches")
+	branch := router.Group("branches")
 	{
-		placeBranch.GET("/", hdlr.getListAction)
+		branch.GET("/", hdlr.getListAction)
 	}
 }
 
-func (hdlr PlaceBranchHdlr) getListAction(c *gin.Context) {
+func (hdlr BranchHdlr) getListAction(c *gin.Context) {
 
-	var req GetPlaceBranchesRequest
+	var req GetBranchesRequest
 
 	err := c.ShouldBindQuery(&req)
 	if err != nil {
-		hdlr.logger.Errorf("failed bind `get place branches` request: %v", err)
+		hdlr.logger.Errorf("failed bind `get branches` request: %v", err)
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewBadRequestError(fmt.Errorf("failed to bind request")),
@@ -45,27 +45,27 @@ func (hdlr PlaceBranchHdlr) getListAction(c *gin.Context) {
 	}
 
 	if invalid := hdlr.validator.Struct(&req); invalid != nil {
-		hdlr.logger.Errorf("`get place branches` request validation error: %v", err)
+		hdlr.logger.Errorf("`get branches` request validation error: %v", err)
 		c.JSON(httpresp.GetError(invalid))
 		return
 	}
 
-	dto := dtos.GetPlaceBranchesDTO{
+	dto := dtos.GetBranchesDTO{
 		Page:  req.Page,
 		Limit: req.Limit,
 		Query: req.Query,
 	}
 
-	repo := repositories.NewPlaceBranchRepository(hdlr.db)
+	repo := repositories.NewBranchRepository(hdlr.db)
 
-	uc := place.NewGetPlaceBranchesUseCase(
+	uc := branch.NewGetBranchesUseCase(
 		hdlr.logger,
 		repo,
 	)
 
 	res, err := uc.Exec(dto)
 	if err != nil {
-		hdlr.logger.Errorf("get error from `get place branches` usecase: %v", err)
+		hdlr.logger.Errorf("get error from `get branches` usecase: %v", err)
 		c.JSON(
 			httpresp.GetError(err),
 		)

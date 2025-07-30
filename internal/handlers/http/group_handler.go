@@ -74,12 +74,12 @@ func (hdlr GroupHdlr) createAction(c *gin.Context) {
 	}
 
 	dto := dtos.CreateGroupDTO{
-		Name:               req.Name,
-		SelectionMode:      req.SelectionMode,
-		IsPublic:           req.IsPublic,
-		PlaceBranchID:      req.PlaceBranchID,
-		PlaceBranchOptions: req.PlaceBranchOptions,
-		OwnerID:            userID,
+		Name:          req.Name,
+		SelectionMode: req.SelectionMode,
+		IsPublic:      req.IsPublic,
+		BranchID:      req.BranchID,
+		BranchOptions: req.BranchOptions,
+		OwnerID:       userID,
 	}
 
 	groupRepo := repositories.NewGroupRepository(hdlr.db)
