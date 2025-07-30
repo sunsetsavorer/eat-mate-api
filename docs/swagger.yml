@@ -13,8 +13,8 @@ tags:
     description: 'authorization operations'
   - name: 'User'
     description: 'user operations'
-  - name: 'PlaceBranch'
-    description: 'place branch operations'
+  - name: 'Branch'
+    description: 'branch operations'
   - name: 'Group'
     description: 'group operations'
 
@@ -53,14 +53,14 @@ paths:
       security:
         - JWT: []
 
-  /v1/place_branches/:
+  /v1/branches/:
     get:
-      summary: 'get place branches'
+      summary: 'get branches'
       tags:
-        - PlaceBranch
+        - Branch
       responses:
         200:
-          $ref: '#/components/responses/GetPlaceBranches'
+          $ref: '#/components/responses/GetBranches'
       parameters:
         - $ref: '#/components/schemas/PaginationPageQueryParameter'
         - $ref: '#/components/schemas/PaginationLimitQueryParameter'
@@ -147,21 +147,21 @@ components:
       required:
         - name
 
-    GetPlaceBranchesResponse:
+    GetBranchesResponse:
       type: object
       properties:
         data:
           type: object
           properties:
-            place_branches:
+            branches:
               type: array
               items:
-                $ref: '#/components/schemas/PlaceBranchesResponseItem'
+                $ref: '#/components/schemas/BranchResponseItem'
             pagination:
               type: object
               $ref: '#/components/schemas/PaginationResponse'
 
-    PlaceBranchesResponseItem:
+    BranchResponseItem:
       type: object
       properties:
         id:
@@ -177,11 +177,11 @@ components:
         name: {type: string}
         selection_mode: {type: string}
         is_public: {type: boolean}
-        place_branch_options:
+        branch_options:
           type: array
           items:
-            $ref: '#/components/schemas/GroupPlaceBranchOption'
-        place_branch_id:
+            $ref: '#/components/schemas/GroupBranchOption'
+        branch_id:
           type: string
           format: uuid
       required:
@@ -189,7 +189,7 @@ components:
         - selection_mode
         - is_public
 
-    GroupPlaceBranchOption:
+    GroupBranchOption:
       type: string
       format: uuid
 
@@ -253,12 +253,12 @@ components:
         name: 'updated_sunsetsavorer'
         photo_url: 'https://example.com/avatars/updated_sunsetsavorer.svg'
 
-    GetPlaceBranchesResponse:
+    GetBranchesResponse:
       value:
         data:
-          place_branches:
+          branches:
             - id: '6310cc48-4833-46c9-9464-da30ec2b117f'
-              icon_path: '/icons/place_branches/kfc.svg'
+              icon_path: '/icons/branches/kfc.svg'
               name: 'KFC'
               address: 'Pr Dovatora'
               contact_phone: '8 (800) 535-35-35'
@@ -278,14 +278,14 @@ components:
         name: 'Defined group'
         selection_mode: 'defined'
         is_public: true
-        place_branch_id: '81320520-65da-41cf-9fa2-61392a24ec1d'
+        branch_id: '81320520-65da-41cf-9fa2-61392a24ec1d'
 
     CreateVotingGroupRequestBody:
       value:
         name: 'Voting group'
         selection_mode: 'voting'
         is_public: true
-        place_branch_options:
+        branch_options:
           - '059c0f25-500e-47aa-84bd-6baefc8bb0e5'
           - '44473945-2bf4-407d-b943-4fadf091eb34'
           - '834ac556-35c3-45f7-a605-52694d5039eb'
@@ -297,7 +297,7 @@ components:
         name: 'Random group'
         selection_mode: 'random'
         is_public: true
-        place_branch_options:
+        branch_options:
           - '059c0f25-500e-47aa-84bd-6baefc8bb0e5'
           - '44473945-2bf4-407d-b943-4fadf091eb34'
           - '834ac556-35c3-45f7-a605-52694d5039eb'
@@ -405,15 +405,15 @@ components:
             Base:
               $ref: '#/components/examples/SigninResponse'
 
-    GetPlaceBranches:
+    GetBranches:
       description: 'success request'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/GetPlaceBranchesResponse'
+            $ref: '#/components/schemas/GetBranchesResponse'
           examples:
             Base:
-              $ref: '#/components/examples/GetPlaceBranchesResponse'
+              $ref: '#/components/examples/GetBranchesResponse'
 
     CreateGroup:
       description: 'success group creation'
