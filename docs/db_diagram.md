@@ -4,15 +4,15 @@ Table users {
   photo_url string [null]
 }
 
-Table places {
+Table brands {
   id uuid [pk]
   name string [not null, unique]
   icon_path string [null]
 }
 
-Table place_branches {
+Table branches {
   id uuid [pk]
-  place_id uuid [ref: - places.id]
+  brand_id uuid [ref: - brands.id]
   address string [null]
   contact_phone string [null]
   coordinates json [null]
@@ -24,7 +24,7 @@ Table groups {
   is_public bool [default: true]
   is_active bool [default: true]
   selection_mode selection_mode [not null]
-  place_branch_id uuid [null, ref: - place_branches.id]
+  branch_id uuid [null, ref: - branches.id]
 }
 
 Table group_members {
@@ -36,12 +36,12 @@ Table group_members {
 Table votes {
   group_id uuid [ref: - groups.id]
   user_id bigint [ref: - users.id]
-  place_branch_id uuid [null, ref: - place_branches.id]
+  branch_id uuid [null, ref: - branches.id]
 }
 
-Table group_place_options {
+Table group_branch_options {
   group_id uuid [ref: - groups.id]
-  place_branch_id uuid [ref: - place_branches.id]
+  branch_id uuid [ref: - branches.id]
 }
 
 Enum selection_mode {
