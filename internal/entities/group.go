@@ -3,15 +3,15 @@ package entities
 import "github.com/google/uuid"
 
 type GroupEntity struct {
-	ID                 uuid.UUID           `json:"id"`
-	Name               string              `json:"name"`
-	IsPublic           bool                `json:"is_public"`
-	IsActive           bool                `json:"is_active"`
-	SelectionMode      string              `json:"selection_mode"`
-	PlaceBranchID      uuid.NullUUID       `json:"place_branch_id"`
-	PlaceBranch        PlaceBranchEntity   `json:"place_branch"`
-	PlaceBranchOptions []PlaceBranchEntity `json:"place_branch_options"`
-	Members            []GroupMemberEntity `json:"members"`
+	ID            uuid.UUID           `json:"id"`
+	Name          string              `json:"name"`
+	IsPublic      bool                `json:"is_public"`
+	IsActive      bool                `json:"is_active"`
+	SelectionMode string              `json:"selection_mode"`
+	BranchID      uuid.NullUUID       `json:"branch_id"`
+	Branch        BranchEntity        `json:"branch"`
+	BranchOptions []BranchEntity      `json:"branch_options"`
+	Members       []GroupMemberEntity `json:"members"`
 }
 
 func (e GroupEntity) GetID() uuid.UUID {
@@ -54,28 +54,28 @@ func (e *GroupEntity) SetSelectionMode(v string) {
 	e.SelectionMode = v
 }
 
-func (e GroupEntity) GetPlaceBranchID() uuid.NullUUID {
-	return e.PlaceBranchID
+func (e GroupEntity) GetBranchID() uuid.NullUUID {
+	return e.BranchID
 }
 
-func (e *GroupEntity) SetPlaceBranchID(v uuid.NullUUID) {
-	e.PlaceBranchID = v
+func (e *GroupEntity) SetBranchID(v uuid.NullUUID) {
+	e.BranchID = v
 }
 
-func (e GroupEntity) GetPlaceBranch() PlaceBranchEntity {
-	return e.PlaceBranch
+func (e GroupEntity) GetBranch() BranchEntity {
+	return e.Branch
 }
 
-func (e *GroupEntity) SetPlaceBranch(v PlaceBranchEntity) {
-	e.PlaceBranch = v
+func (e *GroupEntity) SetBranch(v BranchEntity) {
+	e.Branch = v
 }
 
-func (e GroupEntity) GetPlaceBranchOptions() []PlaceBranchEntity {
-	return e.PlaceBranchOptions
+func (e GroupEntity) GetBranchOptions() []BranchEntity {
+	return e.BranchOptions
 }
 
-func (e *GroupEntity) SetPlaceBranchOptions(v []PlaceBranchEntity) {
-	e.PlaceBranchOptions = v
+func (e *GroupEntity) SetBranchOptions(v []BranchEntity) {
+	e.BranchOptions = v
 }
 
 func (e GroupEntity) GetMembers() []GroupMemberEntity {
