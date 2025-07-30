@@ -59,26 +59,26 @@ func (uc CreateGroupUseCase) Exec(dto dtos.CreateGroupDTO) (CreateGroupResponse,
 
 	if dto.GetSelectionMode() == DEFINED_SELECTION_MODE {
 
-		if !dto.GetPlaceBranchID().Valid {
-			return CreateGroupResponse{}, exceptions.NewBadRequestError(fmt.Errorf("not valid place branch uuid"))
+		if !dto.GetBranchID().Valid {
+			return CreateGroupResponse{}, exceptions.NewBadRequestError(fmt.Errorf("not valid branch uuid"))
 		}
 
-		entity.SetPlaceBranchID(dto.GetPlaceBranchID())
+		entity.SetBranchID(dto.GetBranchID())
 	} else {
 
-		dtoPlaceBranchOptions := dto.GetPlaceBranchOptions()
+		dtoBranchOptions := dto.GetBranchOptions()
 
-		if len(dtoPlaceBranchOptions) < PLACE_BRANCH_OPTIONS_LIST_MINIMAL_SIZE {
+		if len(dtoBranchOptions) < BRANCH_OPTIONS_LIST_MINIMAL_SIZE {
 			return CreateGroupResponse{}, exceptions.NewBadRequestError(fmt.Errorf("too few options"))
 		}
 
-		placeBranchOptions := make([]entities.PlaceBranchEntity, len(dto.GetPlaceBranchOptions()))
+		branchOptions := make([]entities.BranchEntity, len(dto.GetBranchOptions()))
 
-		for i := range placeBranchOptions {
-			placeBranchOptions[i].SetID(dtoPlaceBranchOptions[i])
+		for i := range branchOptions {
+			branchOptions[i].SetID(dtoBranchOptions[i])
 		}
 
-		entity.SetPlaceBranchOptions(placeBranchOptions)
+		entity.SetBranchOptions(branchOptions)
 	}
 
 	group, err := uc.groupRepository.Create(entity)

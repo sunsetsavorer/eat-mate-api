@@ -1,4 +1,4 @@
-package place
+package branch
 
 import (
 	"github.com/google/uuid"
@@ -6,21 +6,21 @@ import (
 )
 
 type (
-	PlaceBranchFilter struct {
+	BranchFilter struct {
 		Page  int
 		Limit int
 		Query *string
 	}
 
-	GetPlaceBranchesResponse struct {
-		PlaceBranches []GetPlaceBranchesResponseItem `json:"place_branches"`
-		Pagination    usecases.PaginationResponse    `json:"pagination"`
+	GetBranchesResponse struct {
+		Branches   []GetBranchesResponseItem   `json:"branches"`
+		Pagination usecases.PaginationResponse `json:"pagination"`
 	}
 
-	GetPlaceBranchesResponseItem struct {
+	GetBranchesResponseItem struct {
 		ID           uuid.UUID `json:"id"`
-		IconPath     *string   `json:"icon_path"`
 		Name         string    `json:"name"`
+		IconPath     *string   `json:"icon_path"`
 		Address      *string   `json:"address"`
 		ContactPhone *string   `json:"contact_phone"`
 	}
