@@ -7,17 +7,17 @@ import (
 )
 
 type UpdateUserUseCase struct {
-	log            usecases.LoggerInterface
+	logger         usecases.LoggerInterface
 	userRepository UserRepositoryInterface
 }
 
 func NewUpdateUserUseCase(
-	log usecases.LoggerInterface,
+	logger usecases.LoggerInterface,
 	userRepository UserRepositoryInterface,
 ) *UpdateUserUseCase {
 
 	return &UpdateUserUseCase{
-		log:            log,
+		logger:         logger,
 		userRepository: userRepository,
 	}
 }
@@ -32,7 +32,7 @@ func (uc UpdateUserUseCase) Exec(dto dtos.UpdateUserDTO) error {
 
 	err := uc.userRepository.Update(entity)
 	if err != nil {
-		uc.log.Errorf("error while updating user: %v", err)
+		uc.logger.Errorf("error while updating user: %v", err)
 		return err
 	}
 

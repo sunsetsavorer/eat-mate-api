@@ -10,19 +10,19 @@ import (
 )
 
 type AuthorizeUseCase struct {
-	log            usecases.LoggerInterface
+	logger         usecases.LoggerInterface
 	userRepository UserRepositoryInterface
 	jwtService     usecases.JWTServiceInterface
 }
 
 func NewAuthorizeUseCase(
-	log usecases.LoggerInterface,
+	logger usecases.LoggerInterface,
 	userRepository UserRepositoryInterface,
 	jwtService usecases.JWTServiceInterface,
 ) *AuthorizeUseCase {
 
 	return &AuthorizeUseCase{
-		log,
+		logger,
 		userRepository,
 		jwtService,
 	}
@@ -40,14 +40,14 @@ func (uc AuthorizeUseCase) Exec(dto dtos.AuthorizeDTO) (TokenResponse, error) {
 
 		err := uc.userRepository.Create(user)
 		if err != nil {
-			uc.log.Errorf("failed to create user: %v", err)
+			uc.logger.Errorf("failed to create user: %v", err)
 			return TokenResponse{}, exceptions.NewBadRequestError(fmt.Errorf("failed to create user"))
 		}
 	}
 
 	token, err := uc.jwtService.GenerateTokenByUserID(user.GetID())
 	if err != nil {
-		uc.log.Errorf("failed to generate authorization token: %v", err)
+		uc.logger.Errorf("failed to generate authorization token: %v", err)
 		return TokenResponse{}, exceptions.NewBadRequestError(fmt.Errorf("failed to generate authorization token"))
 	}
 

@@ -10,17 +10,17 @@ import (
 )
 
 type GetBranchesUseCase struct {
-	log              usecases.LoggerInterface
+	logger           usecases.LoggerInterface
 	branchRepository BranchRepositoryInterface
 }
 
 func NewGetBranchesUseCase(
-	log usecases.LoggerInterface,
+	logger usecases.LoggerInterface,
 	branchRepository BranchRepositoryInterface,
 ) *GetBranchesUseCase {
 
 	return &GetBranchesUseCase{
-		log,
+		logger,
 		branchRepository,
 	}
 }
@@ -45,7 +45,7 @@ func (uc GetBranchesUseCase) Exec(dto dtos.GetBranchesDTO) (GetBranchesResponse,
 
 	branches, total, err := uc.branchRepository.GetList(filter)
 	if err != nil {
-		uc.log.Errorf("failed to get branches: %v", err)
+		uc.logger.Errorf("failed to get branches: %v", err)
 		return GetBranchesResponse{}, exceptions.NewBadRequestError(fmt.Errorf("failed to get branches"))
 	}
 

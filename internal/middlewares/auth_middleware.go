@@ -10,17 +10,17 @@ import (
 )
 
 type AuthMiddleware struct {
-	log        usecases.LoggerInterface
+	logger     usecases.LoggerInterface
 	jwtService usecases.JWTServiceInterface
 }
 
 func NewAuthMiddleware(
-	log usecases.LoggerInterface,
+	logger usecases.LoggerInterface,
 	jwtService usecases.JWTServiceInterface,
 ) *AuthMiddleware {
 
 	return &AuthMiddleware{
-		log,
+		logger,
 		jwtService,
 	}
 }
@@ -31,7 +31,7 @@ func (mv AuthMiddleware) Check(c *gin.Context) {
 
 	tokenStruct, err := mv.jwtService.ParseToken(token)
 	if err != nil {
-		mv.log.Errorf("get error while validating token: %v, %v", token, err)
+		mv.logger.Errorf("get error while validating token: %v, %v", token, err)
 		c.AbortWithStatusJSON(
 			httpresp.GetError(exceptions.NewUnauthorizedError(
 				fmt.Errorf("unauthorized"),

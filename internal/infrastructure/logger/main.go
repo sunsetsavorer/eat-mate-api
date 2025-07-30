@@ -8,9 +8,9 @@ type Logger struct {
 
 func NewLogger() *Logger {
 
-	log := logrus.New()
-	log.SetFormatter(&logrus.JSONFormatter{})
-	log.SetLevel(logrus.DebugLevel)
+	logger := logrus.New()
+	logger.SetFormatter(&logrus.JSONFormatter{})
+	logger.SetLevel(logrus.DebugLevel)
 
-	return &Logger{log}
+	return &Logger{logger}
 }
