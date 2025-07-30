@@ -43,8 +43,8 @@ func (app App) InitRouter() *gin.Engine {
 		userHdlr := http.NewUserHandler(baseHdlr)
 		userHdlr.RegisterRoutes(v1)
 
-		placeBranchHdlr := http.NewPlaceBranchHandler(baseHdlr)
-		placeBranchHdlr.RegisterRoutes(v1)
+		branchHdlr := http.NewBranchHandler(baseHdlr)
+		branchHdlr.RegisterRoutes(v1)
 
 		groupHdlr := http.NewGroupHandler(baseHdlr)
 		groupHdlr.RegisterRoutes(v1)
