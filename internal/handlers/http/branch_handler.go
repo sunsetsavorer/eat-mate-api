@@ -12,30 +12,30 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/branch"
 )
 
-type BranchHdlr struct {
-	*BaseHdlr
+type BranchHandler struct {
+	*BaseHandler
 }
 
-func NewBranchHandler(baseHdlr *BaseHdlr) *BranchHdlr {
+func NewBranchHandler(baseHandler *BaseHandler) *BranchHandler {
 
-	return &BranchHdlr{baseHdlr}
+	return &BranchHandler{baseHandler}
 }
 
-func (hdlr BranchHdlr) RegisterRoutes(router *gin.RouterGroup) {
+func (h BranchHandler) RegisterRoutes(router *gin.RouterGroup) {
 
 	branch := router.Group("branches")
 	{
-		branch.GET("/", hdlr.getListAction)
+		branch.GET("/", h.getListAction)
 	}
 }
 
-func (hdlr BranchHdlr) getListAction(c *gin.Context) {
+func (h BranchHandler) getListAction(c *gin.Context) {
 
 	var req GetBranchesRequest
 
 	err := c.ShouldBindQuery(&req)
 	if err != nil {
-		hdlr.logger.Errorf("failed bind `get branches` request: %v", err)
+		h.logger.Errorf("failed bind `get branches` request: %v", err)
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewBadRequestError(fmt.Errorf("failed to bind request")),
@@ -44,8 +44,8 @@ func (hdlr BranchHdlr) getListAction(c *gin.Context) {
 		return
 	}
 
-	if invalid := hdlr.validator.Struct(&req); invalid != nil {
-		hdlr.logger.Errorf("`get branches` request validation error: %v", err)
+	if invalid := h.validator.Struct(&req); invalid != nil {
+		h.logger.Errorf("`get branches` request validation error: %v", err)
 		c.JSON(httpresp.GetError(invalid))
 		return
 	}
@@ -56,16 +56,16 @@ func (hdlr BranchHdlr) getListAction(c *gin.Context) {
 		Query: req.Query,
 	}
 
-	repo := repositories.NewBranchRepository(hdlr.db)
+	repo := repositories.NewBranchRepository(h.db)
 
 	uc := branch.NewGetBranchesUseCase(
-		hdlr.logger,
+		h.logger,
 		repo,
 	)
 
 	res, err := uc.Exec(dto)
 	if err != nil {
-		hdlr.logger.Errorf("get error from `get branches` usecase: %v", err)
+		h.logger.Errorf("get error from `get branches` usecase: %v", err)
 		c.JSON(
 			httpresp.GetError(err),
 		)

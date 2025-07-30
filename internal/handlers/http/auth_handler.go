@@ -14,30 +14,30 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/user"
 )
 
-type AuthHdlr struct {
-	*BaseHdlr
+type AuthHandler struct {
+	*BaseHandler
 }
 
-func NewAuthHandler(baseHdlr *BaseHdlr) *AuthHdlr {
+func NewAuthHandler(baseHandler *BaseHandler) *AuthHandler {
 
-	return &AuthHdlr{baseHdlr}
+	return &AuthHandler{baseHandler}
 }
 
-func (hdlr AuthHdlr) RegisterRoutes(router *gin.RouterGroup) {
+func (h AuthHandler) RegisterRoutes(router *gin.RouterGroup) {
 
 	auth := router.Group("auth")
 	{
-		auth.POST("/signin/", hdlr.authorizeAction)
+		auth.POST("/signin/", h.authorizeAction)
 	}
 }
 
-func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
+func (h AuthHandler) authorizeAction(c *gin.Context) {
 
 	var req AuthorizeRequest
 
 	err := c.ShouldBind(&req)
 	if err != nil {
-		hdlr.logger.Errorf("failed to bind `authorize` request: %v", err)
+		h.logger.Errorf("failed to bind `authorize` request: %v", err)
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewBadRequestError(fmt.Errorf("failed to bind request")),
@@ -46,8 +46,8 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 		return
 	}
 
-	if invalid := hdlr.validator.Struct(req); invalid != nil {
-		hdlr.logger.Errorf("`authorize` request validation error: %v", err)
+	if invalid := h.validator.Struct(req); invalid != nil {
+		h.logger.Errorf("`authorize` request validation error: %v", err)
 		c.JSON(
 			httpresp.GetError(invalid),
 		)
@@ -60,21 +60,21 @@ func (hdlr AuthHdlr) authorizeAction(c *gin.Context) {
 		PhotoURL:   req.PhotoURL,
 	}
 
-	userRepository := repositories.NewUserRepository(hdlr.db)
+	userRepository := repositories.NewUserRepository(h.db)
 	jwtService := services.NewJWTService(
-		hdlr.config.JWT.Secret,
-		time.Minute*hdlr.config.JWT.LifetimeInMinutes,
+		h.config.JWT.Secret,
+		time.Minute*h.config.JWT.LifetimeInMinutes,
 	)
 
 	uc := user.NewAuthorizeUseCase(
-		hdlr.logger,
+		h.logger,
 		userRepository,
 		jwtService,
 	)
 
 	token, err := uc.Exec(dto)
 	if err != nil {
-		hdlr.logger.Errorf("get error from `authorize` usecase: %v", err)
+		h.logger.Errorf("get error from `authorize` usecase: %v", err)
 		c.JSON(httpresp.GetError(err))
 		return
 	}

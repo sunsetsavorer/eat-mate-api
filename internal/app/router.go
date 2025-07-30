@@ -28,7 +28,7 @@ func (app App) InitRouter() *gin.Engine {
 		),
 	)
 
-	baseHdlr := http.NewBaseHdlr(
+	baseHandler := http.NewBaseHandler(
 		app.db,
 		app.config,
 		app.logger,
@@ -37,17 +37,17 @@ func (app App) InitRouter() *gin.Engine {
 
 	v1 := router.Group("v1")
 	{
-		authHdlr := http.NewAuthHandler(baseHdlr)
-		authHdlr.RegisterRoutes(v1)
+		authHandler := http.NewAuthHandler(baseHandler)
+		authHandler.RegisterRoutes(v1)
 
-		userHdlr := http.NewUserHandler(baseHdlr)
-		userHdlr.RegisterRoutes(v1)
+		userHandler := http.NewUserHandler(baseHandler)
+		userHandler.RegisterRoutes(v1)
 
-		branchHdlr := http.NewBranchHandler(baseHdlr)
-		branchHdlr.RegisterRoutes(v1)
+		branchHandler := http.NewBranchHandler(baseHandler)
+		branchHandler.RegisterRoutes(v1)
 
-		groupHdlr := http.NewGroupHandler(baseHdlr)
-		groupHdlr.RegisterRoutes(v1)
+		groupHandler := http.NewGroupHandler(baseHandler)
+		groupHandler.RegisterRoutes(v1)
 	}
 
 	return router

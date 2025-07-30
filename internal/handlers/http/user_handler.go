@@ -14,38 +14,38 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/user"
 )
 
-type UserHdlr struct {
-	*BaseHdlr
+type UserHandler struct {
+	*BaseHandler
 }
 
-func NewUserHandler(baseHdlr *BaseHdlr) *UserHdlr {
+func NewUserHandler(baseHandler *BaseHandler) *UserHandler {
 
-	return &UserHdlr{baseHdlr}
+	return &UserHandler{baseHandler}
 }
 
-func (hdlr UserHdlr) RegisterRoutes(router *gin.RouterGroup) {
+func (h UserHandler) RegisterRoutes(router *gin.RouterGroup) {
 
 	jwtService := services.NewJWTService(
-		hdlr.config.JWT.Secret,
-		hdlr.config.JWT.LifetimeInMinutes,
+		h.config.JWT.Secret,
+		h.config.JWT.LifetimeInMinutes,
 	)
 
 	authMiddleware := middlewares.NewAuthMiddleware(
-		hdlr.logger,
+		h.logger,
 		jwtService,
 	)
 
 	userProtected := router.Group("users", authMiddleware.Check)
 	{
-		userProtected.PUT("/me/", hdlr.updateAction)
+		userProtected.PUT("/me/", h.updateAction)
 	}
 }
 
-func (hdlr UserHdlr) updateAction(c *gin.Context) {
+func (h UserHandler) updateAction(c *gin.Context) {
 
-	userID, exists := hdlr.GetUserID(c)
+	userID, exists := h.GetUserID(c)
 	if !exists {
-		hdlr.logger.Errorf("failed to get `user id` from context")
+		h.logger.Errorf("failed to get `user id` from context")
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewUnauthorizedError(
@@ -60,7 +60,7 @@ func (hdlr UserHdlr) updateAction(c *gin.Context) {
 
 	err := c.ShouldBind(&req)
 	if err != nil {
-		hdlr.logger.Errorf("failed to bind `update user` request: %v", err)
+		h.logger.Errorf("failed to bind `update user` request: %v", err)
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewBadRequestError(fmt.Errorf("failed to bind request")),
@@ -69,8 +69,8 @@ func (hdlr UserHdlr) updateAction(c *gin.Context) {
 		return
 	}
 
-	if invalid := hdlr.validator.Struct(req); invalid != nil {
-		hdlr.logger.Errorf("`update user` request validation error: %v", err)
+	if invalid := h.validator.Struct(req); invalid != nil {
+		h.logger.Errorf("`update user` request validation error: %v", err)
 		c.JSON(
 			httpresp.GetError(invalid),
 		)
@@ -83,15 +83,15 @@ func (hdlr UserHdlr) updateAction(c *gin.Context) {
 		PhotoURL: req.PhotoURL,
 	}
 
-	userRepository := repositories.NewUserRepository(hdlr.db)
+	userRepository := repositories.NewUserRepository(h.db)
 
 	uc := user.NewUpdateUserUseCase(
-		hdlr.logger,
+		h.logger,
 		userRepository,
 	)
 
 	if err := uc.Exec(dto); err != nil {
-		hdlr.logger.Errorf("get error from `update user` usecase: %v", err)
+		h.logger.Errorf("get error from `update user` usecase: %v", err)
 		c.JSON(
 			httpresp.GetError(err),
 		)

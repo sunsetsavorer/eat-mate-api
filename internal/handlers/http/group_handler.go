@@ -14,38 +14,38 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/group"
 )
 
-type GroupHdlr struct {
-	*BaseHdlr
+type GroupHandler struct {
+	*BaseHandler
 }
 
-func NewGroupHandler(baseHdlr *BaseHdlr) *GroupHdlr {
+func NewGroupHandler(baseHandler *BaseHandler) *GroupHandler {
 
-	return &GroupHdlr{baseHdlr}
+	return &GroupHandler{baseHandler}
 }
 
-func (hdlr GroupHdlr) RegisterRoutes(router *gin.RouterGroup) {
+func (h GroupHandler) RegisterRoutes(router *gin.RouterGroup) {
 
 	jwtService := services.NewJWTService(
-		hdlr.config.JWT.Secret,
-		hdlr.config.JWT.LifetimeInMinutes,
+		h.config.JWT.Secret,
+		h.config.JWT.LifetimeInMinutes,
 	)
 
 	authMiddleware := middlewares.NewAuthMiddleware(
-		hdlr.logger,
+		h.logger,
 		jwtService,
 	)
 
 	groupProtected := router.Group("groups", authMiddleware.Check)
 	{
-		groupProtected.POST("/", hdlr.createAction)
+		groupProtected.POST("/", h.createAction)
 	}
 }
 
-func (hdlr GroupHdlr) createAction(c *gin.Context) {
+func (h GroupHandler) createAction(c *gin.Context) {
 
-	userID, exists := hdlr.GetUserID(c)
+	userID, exists := h.GetUserID(c)
 	if !exists {
-		hdlr.logger.Errorf("failed to get `user id` from context")
+		h.logger.Errorf("failed to get `user id` from context")
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewUnauthorizedError(fmt.Errorf("unauthorized")),
@@ -58,7 +58,7 @@ func (hdlr GroupHdlr) createAction(c *gin.Context) {
 
 	err := c.ShouldBind(&req)
 	if err != nil {
-		hdlr.logger.Errorf("failed to bind `create group` request: %v", err)
+		h.logger.Errorf("failed to bind `create group` request: %v", err)
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewBadRequestError(fmt.Errorf("failed to bind request")),
@@ -67,8 +67,8 @@ func (hdlr GroupHdlr) createAction(c *gin.Context) {
 		return
 	}
 
-	if invalid := hdlr.validator.Struct(&req); invalid != nil {
-		hdlr.logger.Errorf("`create group` request validation error: %v", invalid)
+	if invalid := h.validator.Struct(&req); invalid != nil {
+		h.logger.Errorf("`create group` request validation error: %v", invalid)
 		c.JSON(httpresp.GetError(invalid))
 		return
 	}
@@ -82,18 +82,18 @@ func (hdlr GroupHdlr) createAction(c *gin.Context) {
 		OwnerID:       userID,
 	}
 
-	groupRepo := repositories.NewGroupRepository(hdlr.db)
-	userRepo := repositories.NewUserRepository(hdlr.db)
+	groupRepo := repositories.NewGroupRepository(h.db)
+	userRepo := repositories.NewUserRepository(h.db)
 
 	uc := group.NewCreateGroupUseCase(
-		hdlr.logger,
+		h.logger,
 		groupRepo,
 		userRepo,
 	)
 
 	res, err := uc.Exec(dto)
 	if err != nil {
-		hdlr.logger.Errorf("get error from `create group` usecase: %v", err)
+		h.logger.Errorf("get error from `create group` usecase: %v", err)
 		c.JSON(httpresp.GetError(err))
 		return
 	}

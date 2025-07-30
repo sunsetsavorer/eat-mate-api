@@ -11,11 +11,11 @@ type Server struct {
 	*http.Server
 }
 
-func NewServer(addr string, hdlr http.Handler) *Server {
+func NewServer(addr string, h http.Handler) *Server {
 	return &Server{
 		&http.Server{
 			Addr:           ":" + addr,
-			Handler:        hdlr,
+			Handler:        h,
 			MaxHeaderBytes: 1 << 20, //1MB
 			ReadTimeout:    10 * time.Second,
 			WriteTimeout:   10 * time.Second,

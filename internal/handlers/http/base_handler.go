@@ -8,21 +8,21 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/validator"
 )
 
-type BaseHdlr struct {
+type BaseHandler struct {
 	db        *db.Db
 	config    *config.Config
 	logger    *logger.Logger
 	validator *validator.Validator
 }
 
-func NewBaseHdlr(
+func NewBaseHandler(
 	db *db.Db,
 	config *config.Config,
 	logger *logger.Logger,
 	validator *validator.Validator,
-) *BaseHdlr {
+) *BaseHandler {
 
-	return &BaseHdlr{
+	return &BaseHandler{
 		db:        db,
 		config:    config,
 		logger:    logger,
@@ -30,7 +30,7 @@ func NewBaseHdlr(
 	}
 }
 
-func (hdlr BaseHdlr) GetUserID(c *gin.Context) (int64, bool) {
+func (h BaseHandler) GetUserID(c *gin.Context) (int64, bool) {
 
 	if userID, ok := c.Get("user_id"); ok {
 		return userID.(int64), true
