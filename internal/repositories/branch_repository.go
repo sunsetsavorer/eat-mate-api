@@ -5,29 +5,29 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db/models"
-	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/place"
+	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/branch"
 )
 
-type PlaceBranchRepository struct {
+type BranchRepository struct {
 	db *db.Db
 }
 
-func NewPlaceBranchRepository(db *db.Db) *PlaceBranchRepository {
+func NewBranchRepository(db *db.Db) *BranchRepository {
 
-	return &PlaceBranchRepository{db}
+	return &BranchRepository{db}
 }
 
-func (r PlaceBranchRepository) GetList(filter place.PlaceBranchFilter) ([]entities.PlaceBranchEntity, int64, error) {
+func (r BranchRepository) GetList(filter branch.BranchFilter) ([]entities.BranchEntity, int64, error) {
 
-	var placeBranches []models.PlaceBranchModel
+	var branches []models.BranchModel
 	var count int64
 
 	query := r.db.Client.
-		Model(&models.PlaceBranchModel{}).
-		Joins("Place")
+		Model(&models.BranchModel{}).
+		Joins("Brand")
 
 	if filter.Query != nil {
-		query = query.Where("\"Place\".\"name\" ILIKE ?", "%"+*filter.Query+"%")
+		query = query.Where("\"Brand\".\"name\" ILIKE ?", "%"+*filter.Query+"%")
 	}
 
 	err := query.
@@ -42,16 +42,16 @@ func (r PlaceBranchRepository) GetList(filter place.PlaceBranchFilter) ([]entiti
 	err = query.
 		Limit(filter.Limit).
 		Offset(offset).
-		Preload("Place").
-		Find(&placeBranches).
+		Preload("Brand").
+		Find(&branches).
 		Error
 	if err != nil {
 		return nil, 0, exceptions.NewRepositoryError(err)
 	}
 
-	var result []entities.PlaceBranchEntity = make([]entities.PlaceBranchEntity, len(placeBranches))
+	var result []entities.BranchEntity = make([]entities.BranchEntity, len(branches))
 
-	for i, e := range placeBranches {
+	for i, e := range branches {
 		result[i] = e.ToEntity()
 	}
 

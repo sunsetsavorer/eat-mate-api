@@ -44,14 +44,14 @@ func (r GroupRepository) Create(entity entities.GroupEntity) (entities.GroupEnti
 		return entities.GroupEntity{}, exceptions.NewRepositoryError(err)
 	}
 
-	entityPlaceBranchOptions := entity.GetPlaceBranchOptions()
-	placeBranchOptions := make([]models.PlaceBranchModel, len(entityPlaceBranchOptions))
+	entityBranchOptions := entity.GetBranchOptions()
+	branchOptions := make([]models.BranchModel, len(entityBranchOptions))
 
-	for i, e := range entityPlaceBranchOptions {
-		placeBranchOptions[i].FromEntity(e)
+	for i, e := range entityBranchOptions {
+		branchOptions[i].FromEntity(e)
 	}
 
-	err = tx.Model(&group).Association("PlaceBranchOptions").Append(&placeBranchOptions)
+	err = tx.Model(&group).Association("BranchOptions").Append(&branchOptions)
 	if err != nil {
 		tx.Rollback()
 		return entities.GroupEntity{}, exceptions.NewRepositoryError(err)
