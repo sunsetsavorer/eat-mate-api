@@ -1,4 +1,0 @@
-CREATE TABLE group_place_options(
-	group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE ON UPDATE CASCADE,
-	place_branch_id UUID NOT NULL REFERENCES place_branches(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
