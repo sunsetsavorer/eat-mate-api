@@ -8,26 +8,26 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/pkg/nullable"
 )
 
-type PlaceModel struct {
+type BrandModel struct {
 	ID       uuid.UUID      `gorm:"column:id;primaryKey"`
 	Name     string         `gorm:"column:name;not null"`
 	IconPath sql.NullString `gorm:"column:icon_path"`
 }
 
-func (m PlaceModel) TableName() string {
-	return "places"
+func (BrandModel) TableName() string {
+	return "brands"
 }
 
-func (m PlaceModel) ToEntity() entities.PlaceEntity {
+func (m BrandModel) ToEntity() entities.BrandEntity {
 
-	return entities.PlaceEntity{
+	return entities.BrandEntity{
 		ID:       m.ID,
 		Name:     m.Name,
 		IconPath: nullable.NullStringToPtr(m.IconPath),
 	}
 }
 
-func (m *PlaceModel) FromEntity(e entities.PlaceEntity) {
+func (m *BrandModel) FromEntity(e entities.BrandEntity) {
 
 	m.ID = e.GetID()
 	m.Name = e.GetName()

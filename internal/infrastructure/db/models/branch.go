@@ -8,33 +8,33 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/pkg/nullable"
 )
 
-type PlaceBranchModel struct {
+type BranchModel struct {
 	ID           uuid.UUID      `gorm:"column:id;primaryKey"`
-	PlaceID      uuid.UUID      `gorm:"column:place_id;not null"`
-	Place        PlaceModel     `gorm:"foreignKey:PlaceID"`
+	BrandID      uuid.UUID      `gorm:"column:brand_id;not null"`
+	Brand        BrandModel     `gorm:"foreignKey:BrandID"`
 	Address      sql.NullString `gorm:"column:address"`
 	ContactPhone sql.NullString `gorm:"column:contact_phone"`
 }
 
-func (PlaceBranchModel) TableName() string {
-	return "place_branches"
+func (BranchModel) TableName() string {
+	return "branches"
 }
 
-func (m PlaceBranchModel) ToEntity() entities.PlaceBranchEntity {
+func (m BranchModel) ToEntity() entities.BranchEntity {
 
-	return entities.PlaceBranchEntity{
+	return entities.BranchEntity{
 		ID:           m.ID,
-		PlaceID:      m.PlaceID,
-		Place:        m.Place.ToEntity(),
+		BrandID:      m.BrandID,
+		Brand:        m.Brand.ToEntity(),
 		Address:      nullable.NullStringToPtr(m.Address),
 		ContactPhone: nullable.NullStringToPtr(m.ContactPhone),
 	}
 }
 
-func (m *PlaceBranchModel) FromEntity(e entities.PlaceBranchEntity) {
+func (m *BranchModel) FromEntity(e entities.BranchEntity) {
 
 	m.ID = e.GetID()
-	m.PlaceID = e.GetPlaceID()
+	m.BrandID = e.GetBrandID()
 	m.Address = nullable.PtrToNullString(e.GetAddress())
 	m.ContactPhone = nullable.PtrToNullString(e.GetContactPhone())
 }

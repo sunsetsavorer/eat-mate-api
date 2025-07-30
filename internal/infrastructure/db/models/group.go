@@ -6,15 +6,15 @@ import (
 )
 
 type GroupModel struct {
-	ID                 uuid.UUID          `gorm:"column:id;default:gen_random_uuid();primaryKey"`
-	Name               string             `gorm:"column:name;not null"`
-	IsPublic           bool               `gorm:"column:is_public"`
-	IsActive           bool               `gorm:"column:is_active"`
-	SelectionMode      string             `gorm:"column:selection_mode"`
-	PlaceBranchID      uuid.NullUUID      `gorm:"column:place_branch_id"`
-	PlaceBranch        PlaceBranchModel   `gorm:"foreignKey:PlaceBranchID"`
-	PlaceBranchOptions []PlaceBranchModel `gorm:"many2many:group_place_options;joinForeignKey:group_id;joinReferences:place_branch_id"`
-	Members            []GroupMemberModel `gorm:"foreignKey:GroupID"`
+	ID            uuid.UUID          `gorm:"column:id;default:gen_random_uuid();primaryKey"`
+	Name          string             `gorm:"column:name;not null"`
+	IsPublic      bool               `gorm:"column:is_public"`
+	IsActive      bool               `gorm:"column:is_active"`
+	SelectionMode string             `gorm:"column:selection_mode"`
+	BranchID      uuid.NullUUID      `gorm:"column:branch_id"`
+	Branch        BranchModel        `gorm:"foreignKey:BranchID"`
+	BranchOptions []BranchModel      `gorm:"many2many:group_branch_options;joinForeignKey:group_id;joinReferences:branch_id"`
+	Members       []GroupMemberModel `gorm:"foreignKey:GroupID"`
 }
 
 func (GroupModel) TableName() string {
@@ -23,9 +23,9 @@ func (GroupModel) TableName() string {
 
 func (m GroupModel) ToEntity() entities.GroupEntity {
 
-	options := make([]entities.PlaceBranchEntity, len(m.PlaceBranchOptions))
+	options := make([]entities.BranchEntity, len(m.BranchOptions))
 
-	for i, e := range m.PlaceBranchOptions {
+	for i, e := range m.BranchOptions {
 		options[i] = e.ToEntity()
 	}
 
@@ -36,15 +36,15 @@ func (m GroupModel) ToEntity() entities.GroupEntity {
 	}
 
 	return entities.GroupEntity{
-		ID:                 m.ID,
-		Name:               m.Name,
-		IsPublic:           m.IsPublic,
-		IsActive:           m.IsActive,
-		SelectionMode:      m.SelectionMode,
-		PlaceBranchID:      m.PlaceBranchID,
-		PlaceBranch:        m.PlaceBranch.ToEntity(),
-		PlaceBranchOptions: options,
-		Members:            members,
+		ID:            m.ID,
+		Name:          m.Name,
+		IsPublic:      m.IsPublic,
+		IsActive:      m.IsActive,
+		SelectionMode: m.SelectionMode,
+		BranchID:      m.BranchID,
+		Branch:        m.Branch.ToEntity(),
+		BranchOptions: options,
+		Members:       members,
 	}
 }
 
@@ -55,5 +55,5 @@ func (m *GroupModel) FromEntity(e entities.GroupEntity) {
 	m.IsPublic = e.GetIsPublic()
 	m.IsActive = e.GetIsActive()
 	m.SelectionMode = e.GetSelectionMode()
-	m.PlaceBranchID = e.GetPlaceBranchID()
+	m.BranchID = e.GetBranchID()
 }
