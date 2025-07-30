@@ -9,11 +9,6 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/usecases"
 )
 
-const (
-	DEFINED_SELECTION_MODE                 = "defined"
-	PLACE_BRANCH_OPTIONS_LIST_MINIMAL_SIZE = 2
-)
-
 type CreateGroupUseCase struct {
 	logger          usecases.LoggerInterface
 	groupRepository GroupRepositoryInterface
@@ -56,7 +51,7 @@ func (uc CreateGroupUseCase) Exec(dto dtos.CreateGroupDTO) (CreateGroupResponse,
 	groupMembers := []entities.GroupMemberEntity{
 		{
 			UserID: dto.GetOwnerID(),
-			Role:   "owner",
+			Role:   OWNER_ROLE,
 		},
 	}
 
