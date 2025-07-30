@@ -72,12 +72,12 @@ func (h AuthHandler) authorizeAction(c *gin.Context) {
 		jwtService,
 	)
 
-	token, err := uc.Exec(dto)
+	response, err := uc.Exec(dto)
 	if err != nil {
 		h.logger.Errorf("get error from `authorize` usecase: %v", err)
 		c.JSON(httpresp.GetError(err))
 		return
 	}
 
-	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: token})
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: response})
 }

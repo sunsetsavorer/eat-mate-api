@@ -63,7 +63,7 @@ func (h BranchHandler) getListAction(c *gin.Context) {
 		repo,
 	)
 
-	res, err := uc.Exec(dto)
+	response, err := uc.Exec(dto)
 	if err != nil {
 		h.logger.Errorf("get error from `get branches` usecase: %v", err)
 		c.JSON(
@@ -72,5 +72,5 @@ func (h BranchHandler) getListAction(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: res})
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: response})
 }

@@ -91,12 +91,12 @@ func (h GroupHandler) createAction(c *gin.Context) {
 		userRepo,
 	)
 
-	res, err := uc.Exec(dto)
+	response, err := uc.Exec(dto)
 	if err != nil {
 		h.logger.Errorf("get error from `create group` usecase: %v", err)
 		c.JSON(httpresp.GetError(err))
 		return
 	}
 
-	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: res})
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: response})
 }
