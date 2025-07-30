@@ -3,12 +3,12 @@ package dtos
 import "github.com/google/uuid"
 
 type CreateGroupDTO struct {
-	Name               string
-	SelectionMode      string
-	IsPublic           bool
-	PlaceBranchID      uuid.NullUUID
-	PlaceBranchOptions []uuid.UUID
-	OwnerID            int64
+	Name          string
+	SelectionMode string
+	IsPublic      bool
+	BranchID      uuid.NullUUID
+	BranchOptions []uuid.UUID
+	OwnerID       int64
 }
 
 func (dto CreateGroupDTO) GetName() string {
@@ -23,12 +23,12 @@ func (dto CreateGroupDTO) GetIsPublic() bool {
 	return dto.IsPublic
 }
 
-func (dto CreateGroupDTO) GetPlaceBranchID() uuid.NullUUID {
-	return dto.PlaceBranchID
+func (dto CreateGroupDTO) GetBranchID() uuid.NullUUID {
+	return dto.BranchID
 }
 
-func (dto CreateGroupDTO) GetPlaceBranchOptions() []uuid.UUID {
-	return dto.PlaceBranchOptions
+func (dto CreateGroupDTO) GetBranchOptions() []uuid.UUID {
+	return dto.BranchOptions
 }
 
 func (dto CreateGroupDTO) GetOwnerID() int64 {
