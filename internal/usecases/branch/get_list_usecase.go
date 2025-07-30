@@ -20,8 +20,8 @@ func NewGetBranchesUseCase(
 ) *GetBranchesUseCase {
 
 	return &GetBranchesUseCase{
-		logger,
-		branchRepository,
+		logger:           logger,
+		branchRepository: branchRepository,
 	}
 }
 

@@ -22,9 +22,9 @@ func NewAuthorizeUseCase(
 ) *AuthorizeUseCase {
 
 	return &AuthorizeUseCase{
-		logger,
-		userRepository,
-		jwtService,
+		logger:         logger,
+		userRepository: userRepository,
+		jwtService:     jwtService,
 	}
 }
 
