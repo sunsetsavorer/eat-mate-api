@@ -1,6 +1,9 @@
 package group
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"github.com/sunsetsavorer/eat-mate-api/internal/usecases"
+)
 
 const (
 	OWNER_ROLE                       = "owner"
@@ -14,5 +17,9 @@ const (
 type (
 	CreateGroupResponse struct {
 		GroupID uuid.UUID `json:"group_id"`
+	}
+
+	GroupsFilter struct {
+		usecases.PaginationFilter
 	}
 )

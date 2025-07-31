@@ -5,6 +5,7 @@ import (
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db/models"
+	"github.com/sunsetsavorer/eat-mate-api/internal/usecases/group"
 )
 
 type GroupRepository struct {
@@ -60,4 +61,43 @@ func (r GroupRepository) Create(entity entities.GroupEntity) (entities.GroupEnti
 	tx.Commit()
 
 	return group.ToEntity(), nil
+}
+
+func (r GroupRepository) GetList(filter group.GroupsFilter) ([]entities.GroupEntity, int64, error) {
+
+	var groups []models.GroupModel
+	var count int64
+
+	query := r.db.Client.
+		Model(models.GroupModel{}).
+		Where("is_public = ?", true).
+		Where("is_active = ?", true).
+		Order("created_at desc")
+
+	err := query.Count(&count).Error
+	if err != nil {
+		return nil, 0, exceptions.NewRepositoryError(err)
+	}
+
+	offset := (filter.Page - 1) * filter.Limit
+
+	err = query.
+		Offset(offset).
+		Limit(filter.Limit).
+		Preload("Branch.Brand").
+		Preload("Members.User").
+		Find(&groups).
+		Error
+
+	if err != nil {
+		return nil, 0, exceptions.NewRepositoryError(err)
+	}
+
+	groupEntities := make([]entities.GroupEntity, len(groups))
+
+	for i, e := range groups {
+		groupEntities[i] = e.ToEntity()
+	}
+
+	return groupEntities, count, nil
 }
