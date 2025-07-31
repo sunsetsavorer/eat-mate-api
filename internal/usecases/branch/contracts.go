@@ -6,7 +6,7 @@ import (
 )
 
 type (
-	BranchFilter struct {
+	BranchesFilter struct {
 		usecases.PaginationFilter
 		Query *string
 	}

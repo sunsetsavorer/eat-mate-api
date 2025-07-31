@@ -17,7 +17,7 @@ func NewBranchRepository(db *db.Db) *BranchRepository {
 	return &BranchRepository{db}
 }
 
-func (r BranchRepository) GetList(filter branch.BranchFilter) ([]entities.BranchEntity, int64, error) {
+func (r BranchRepository) GetList(filter branch.BranchesFilter) ([]entities.BranchEntity, int64, error) {
 
 	var branches []models.BranchModel
 	var count int64
