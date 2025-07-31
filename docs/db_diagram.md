@@ -25,6 +25,7 @@ Table groups {
   is_active bool [default: true]
   selection_mode selection_mode [not null]
   branch_id uuid [null, ref: - branches.id]
+  created_at timestamp [default: now()]
 }
 
 Table group_members {
