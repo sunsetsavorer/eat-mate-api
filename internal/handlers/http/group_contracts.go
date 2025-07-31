@@ -10,4 +10,8 @@ type (
 		BranchID      uuid.NullUUID `json:"branch_id"`
 		BranchOptions []uuid.UUID   `json:"branch_options"`
 	}
+
+	GetGroupsRequest struct {
+		PaginationRequest
+	}
 )

@@ -108,4 +108,22 @@ func (h GroupHandler) createAction(c *gin.Context) {
 
 func (h GroupHandler) getListAction(c *gin.Context) {
 
+	var req GetGroupsRequest
+
+	err := c.ShouldBindQuery(&req)
+	if err != nil {
+		h.logger.Errorf("failed to bind `get groups` request: %v", err)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(fmt.Errorf("failed to bind request")),
+			),
+		)
+		return
+	}
+
+	if invalid := h.validator.Struct(&req); invalid != nil {
+		h.logger.Errorf("`get groups` request validation error: %v", invalid)
+		c.JSON(httpresp.GetError(invalid))
+		return
+	}
 }
