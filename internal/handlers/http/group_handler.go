@@ -126,4 +126,25 @@ func (h GroupHandler) getListAction(c *gin.Context) {
 		c.JSON(httpresp.GetError(invalid))
 		return
 	}
+
+	dto := dtos.GetGroupsDTO{
+		Page:  req.Page,
+		Limit: req.Limit,
+	}
+
+	groupRepo := repositories.NewGroupRepository(h.db)
+
+	uc := group.NewGetGroupsUseCase(
+		h.logger,
+		groupRepo,
+	)
+
+	response, err := uc.Exec(dto)
+	if err != nil {
+		h.logger.Errorf("get error from `get groups` usecase: %v", err)
+		c.JSON(httpresp.GetError(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: response})
 }
