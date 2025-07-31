@@ -249,7 +249,11 @@ components:
             $ref: '#/componensts/schema/GetGroupsMemberResponseItem'
 
     GetGroupsMemberResponseItem:
-      type: string
+      type: object
+      properties:
+        id: {type: number}
+        name: {type: string}
+        photo_url: {type: string}
 
     PaginationResponse:
       type: object
@@ -368,9 +372,15 @@ components:
               brand_icon_path: '/icons/branches/kfc.svg'
               address: 'kfc address'
               members:
-                - 'https://example.com/avatars/sunsetsavorer.svg'
-                - 'https://example.com/avatars/muhehe.svg'
-                - 'https://example.com/avatars/libint.svg'
+                - id: 2312321123112
+                  name: sunsetsavorer
+                  photo_url: 'https://example.com/avatars/sunsetsavorer.svg'
+                - id: 535435345345345
+                  name: muhehe
+                  photo_url: 'https://example.com/avatars/muhehe.svg'
+                - id: 9808802342398
+                  name: libint
+                  photo_url: 'https://example.com/avatars/libint.svg'
             - id: '81320520-65da-41cf-9fa2-61392a24ec1d'
               name: 'Комната с голосованием'
               selection_mode: 'voting'
@@ -378,9 +388,15 @@ components:
               brand_icon_path: null
               address: null
               members:
-                - 'https://example.com/avatars/sunsetsavorer.svg'
-                - 'https://example.com/avatars/muhehe.svg'
-                - 'https://example.com/avatars/libint.svg'
+                - id: 2312321123112
+                  name: sunsetsavorer
+                  photo_url: 'https://example.com/avatars/sunsetsavorer.svg'
+                - id: 535435345345345
+                  name: muhehe
+                  photo_url: 'https://example.com/avatars/muhehe.svg'
+                - id: 9808802342398
+                  name: libint
+                  photo_url: 'https://example.com/avatars/libint.svg'
             - id: '81320520-65da-41cf-9fa2-61392a24ec1d'
               name: 'Рандомная комната'
               selection_mode: 'random'
@@ -388,9 +404,15 @@ components:
               brand_icon_path: null
               address: null
               members:
-                - 'https://example.com/avatars/sunsetsavorer.svg'
-                - 'https://example.com/avatars/muhehe.svg'
-                - 'https://example.com/avatars/libint.svg'
+                - id: 2312321123112
+                  name: sunsetsavorer
+                  photo_url: 'https://example.com/avatars/sunsetsavorer.svg'
+                - id: 535435345345345
+                  name: muhehe
+                  photo_url: 'https://example.com/avatars/muhehe.svg'
+                - id: 9808802342398
+                  name: libint
+                  photo_url: 'https://example.com/avatars/libint.svg'
           pagination:
             limit: 8
             page: 1
