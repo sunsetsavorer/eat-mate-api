@@ -22,4 +22,9 @@ type (
 		LastPage    int `json:"last_page"`
 		Limit       int `json:"limit"`
 	}
+
+	PaginationFilter struct {
+		Page  int
+		Limit int
+	}
 )
