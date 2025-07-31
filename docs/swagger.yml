@@ -61,6 +61,8 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/GetBranches'
+        400:
+          $ref: '#/components/responses/BadRequestError'
       parameters:
         - $ref: '#/components/schemas/PaginationPageQueryParameter'
         - $ref: '#/components/schemas/PaginationLimitQueryParameter'
@@ -84,6 +86,19 @@ paths:
           $ref: '#/components/responses/ValidationError'
       security:
         - JWT: []
+
+    get:
+      summary: 'get groups'
+      tags:
+        - Group
+      responses:
+        200:
+          $ref: '#/components/responses/GetGroups'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+      parameters:
+        - $ref: '#/components/schemas/PaginationPageQueryParameter'
+        - $ref: '#/components/schemas/PaginationLimitQueryParameter'
 
 components:
   schemas:
@@ -203,6 +218,39 @@ components:
               type: string
               format: uuid
 
+    GetGroupsResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            groups:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetGroupsResponseItem'
+            pagination:
+              type: object
+              $ref: '#/components/schemas/PaginationResponse'
+
+    GetGroupsResponseItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name: {type: string}
+        selection_mode: {type: string}
+        brand_name: {type: string}
+        brand_icon_path: {type: string}
+        address: {type: string}
+        members:
+          type: array
+          items:
+            $ref: '#/componensts/schema/GetGroupsMemberResponseItem'
+
+    GetGroupsMemberResponseItem:
+      type: string
+
     PaginationResponse:
       type: object
       properties:
@@ -308,6 +356,46 @@ components:
       value:
         data:
           group_id: '81320520-65da-41cf-9fa2-61392a24ec1d'
+
+    GetGroupsResponse:
+      value:
+        data:
+          groups:
+            - id: '81320520-65da-41cf-9fa2-61392a24ec1d'
+              name: 'Комната с выбранным местом'
+              selection_mode: 'defined'
+              brand_name: 'KFC'
+              brand_icon_path: '/icons/branches/kfc.svg'
+              address: 'kfc address'
+              members:
+                - 'https://example.com/avatars/sunsetsavorer.svg'
+                - 'https://example.com/avatars/muhehe.svg'
+                - 'https://example.com/avatars/libint.svg'
+            - id: '81320520-65da-41cf-9fa2-61392a24ec1d'
+              name: 'Комната с голосованием'
+              selection_mode: 'voting'
+              brand_name: null
+              brand_icon_path: null
+              address: null
+              members:
+                - 'https://example.com/avatars/sunsetsavorer.svg'
+                - 'https://example.com/avatars/muhehe.svg'
+                - 'https://example.com/avatars/libint.svg'
+            - id: '81320520-65da-41cf-9fa2-61392a24ec1d'
+              name: 'Рандомная комната'
+              selection_mode: 'random'
+              brand_name: null
+              brand_icon_path: null
+              address: null
+              members:
+                - 'https://example.com/avatars/sunsetsavorer.svg'
+                - 'https://example.com/avatars/muhehe.svg'
+                - 'https://example.com/avatars/libint.svg'
+          pagination:
+            limit: 8
+            page: 1
+            next_page: 2
+            last_page: 10
 
   requestBodies:
     Signin:
@@ -424,6 +512,16 @@ components:
           examples:
             Base:
               $ref: '#/components/examples/CreateGroupRespone'
+
+    GetGroups:
+      description: 'success request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetGroupsResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/GetGroupsResponse'
 
   securitySchemes:
     JWT:
