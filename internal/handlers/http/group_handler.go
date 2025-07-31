@@ -39,6 +39,11 @@ func (h GroupHandler) RegisterRoutes(router *gin.RouterGroup) {
 	{
 		groupProtected.POST("/", h.createAction)
 	}
+
+	group := router.Group("groups")
+	{
+		group.GET("/", h.getListAction)
+	}
 }
 
 func (h GroupHandler) createAction(c *gin.Context) {
@@ -99,4 +104,8 @@ func (h GroupHandler) createAction(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: response})
+}
+
+func (h GroupHandler) getListAction(c *gin.Context) {
+
 }
