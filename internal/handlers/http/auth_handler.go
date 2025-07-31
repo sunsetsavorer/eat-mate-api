@@ -47,10 +47,8 @@ func (h AuthHandler) authorizeAction(c *gin.Context) {
 	}
 
 	if invalid := h.validator.Struct(req); invalid != nil {
-		h.logger.Errorf("`authorize` request validation error: %v", err)
-		c.JSON(
-			httpresp.GetError(invalid),
-		)
+		h.logger.Errorf("`authorize` request validation error: %v", invalid)
+		c.JSON(httpresp.GetError(invalid))
 		return
 	}
 

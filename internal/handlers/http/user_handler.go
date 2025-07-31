@@ -70,10 +70,8 @@ func (h UserHandler) updateAction(c *gin.Context) {
 	}
 
 	if invalid := h.validator.Struct(req); invalid != nil {
-		h.logger.Errorf("`update user` request validation error: %v", err)
-		c.JSON(
-			httpresp.GetError(invalid),
-		)
+		h.logger.Errorf("`update user` request validation error: %v", invalid)
+		c.JSON(httpresp.GetError(invalid))
 		return
 	}
 

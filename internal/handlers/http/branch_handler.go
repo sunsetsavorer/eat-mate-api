@@ -45,7 +45,7 @@ func (h BranchHandler) getListAction(c *gin.Context) {
 	}
 
 	if invalid := h.validator.Struct(&req); invalid != nil {
-		h.logger.Errorf("`get branches` request validation error: %v", err)
+		h.logger.Errorf("`get branches` request validation error: %v", invalid)
 		c.JSON(httpresp.GetError(invalid))
 		return
 	}
