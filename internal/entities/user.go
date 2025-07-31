@@ -1,9 +1,9 @@
 package entities
 
 type UserEntity struct {
-	ID       int64
-	Name     string
-	PhotoURL *string
+	ID       int64   `json:"id"`
+	Name     string  `json:"name"`
+	PhotoURL *string `json:"photo_url"`
 }
 
 func (e UserEntity) GetID() int64 {
