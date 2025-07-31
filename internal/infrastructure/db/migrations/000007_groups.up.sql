@@ -4,5 +4,6 @@ CREATE TABLE groups (
 	is_public BOOLEAN NOT NULL DEFAULT true,
 	is_active BOOLEAN NOT NULL DEFAULT true,
 	selection_mode group_mode NOT NULL,
-	branch_id UUID NULL REFERENCES branches(id) ON DELETE SET NULL ON UPDATE CASCADE
+	branch_id UUID NULL REFERENCES branches(id) ON DELETE SET NULL ON UPDATE CASCADE,
+	created_at timestamp DEFAULT now()
 );
