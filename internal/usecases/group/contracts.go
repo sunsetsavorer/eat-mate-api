@@ -34,9 +34,9 @@ type (
 		ID            uuid.UUID             `json:"id"`
 		Name          string                `json:"name"`
 		SelectionMode string                `json:"selection_mode"`
-		BrandName     *string               `json:"brand_name"`
-		BrandIconPath *string               `json:"brand_icon_path"`
-		Address       *string               `json:"address"`
+		BrandName     *string               `json:"brand_name,omitempty"`
+		BrandIconPath *string               `json:"brand_icon_path,omitempty"`
+		Address       *string               `json:"address,omitempty"`
 		Members       []entities.UserEntity `json:"members"`
 	}
 )
