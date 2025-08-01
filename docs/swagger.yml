@@ -384,9 +384,6 @@ components:
             - id: '81320520-65da-41cf-9fa2-61392a24ec1d'
               name: 'Комната с голосованием'
               selection_mode: 'voting'
-              brand_name: null
-              brand_icon_path: null
-              address: null
               members:
                 - id: 2312321123112
                   name: sunsetsavorer
@@ -400,9 +397,6 @@ components:
             - id: '81320520-65da-41cf-9fa2-61392a24ec1d'
               name: 'Рандомная комната'
               selection_mode: 'random'
-              brand_name: null
-              brand_icon_path: null
-              address: null
               members:
                 - id: 2312321123112
                   name: sunsetsavorer
