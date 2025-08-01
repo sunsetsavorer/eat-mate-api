@@ -7,7 +7,8 @@ import (
 
 type (
 	BranchesFilter struct {
-		usecases.PaginationFilter
+		Page  int
+		Limit int
 		Query *string
 	}
 

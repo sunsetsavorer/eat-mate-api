@@ -38,10 +38,8 @@ func (uc GetBranchesUseCase) Exec(dto dtos.GetBranchesDTO) (GetBranchesResponse,
 	}
 
 	filter := BranchesFilter{
-		PaginationFilter: usecases.PaginationFilter{
-			Page:  page,
-			Limit: limit,
-		},
+		Page:  page,
+		Limit: limit,
 		Query: dto.GetQuery(),
 	}
 

@@ -41,10 +41,8 @@ func (uc GetGroupsUseCase) Exec(dto dtos.GetGroupsDTO) (GetGroupsResponse, error
 	}
 
 	filter := GroupsFilter{
-		PaginationFilter: usecases.PaginationFilter{
-			Page:  page,
-			Limit: limit,
-		},
+		Page:  page,
+		Limit: limit,
 	}
 
 	groups, total, err := uc.groupRepository.GetList(filter)

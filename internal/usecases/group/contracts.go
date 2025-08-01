@@ -21,7 +21,8 @@ type (
 	}
 
 	GroupsFilter struct {
-		usecases.PaginationFilter
+		Page  int
+		Limit int
 	}
 
 	GetGroupsResponse struct {
