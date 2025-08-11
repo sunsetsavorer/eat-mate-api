@@ -63,6 +63,8 @@ paths:
           $ref: '#/components/responses/GetBranches'
         400:
           $ref: '#/components/responses/BadRequestError'
+        422:
+          $ref: '#/components/responses/ValidationError'
       parameters:
         - $ref: '#/components/schemas/PaginationPageQueryParameter'
         - $ref: '#/components/schemas/PaginationLimitQueryParameter'
@@ -96,9 +98,28 @@ paths:
           $ref: '#/components/responses/GetGroups'
         400:
           $ref: '#/components/responses/BadRequestError'
+        422:
+          $ref: '#/components/responses/ValidationError'
       parameters:
         - $ref: '#/components/schemas/PaginationPageQueryParameter'
         - $ref: '#/components/schemas/PaginationLimitQueryParameter'
+
+  /v1/groups/{group_id}/:
+    get:
+      summary: 'get group detailed'
+      tags:
+        - Group
+      responses:
+        200:
+          $ref: '#/components/responses/GetGroup'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        422:
+          $ref: '#/components/responses/ValidationError'
+      parameters:
+        - $ref: '#/components/schemas/GroupIDRouteParameter'
 
 components:
   schemas:
@@ -121,6 +142,14 @@ components:
       name: query
       schema:
         type: string
+
+    GroupIDRouteParameter:
+      in: path
+      name: group_id
+      required: true
+      schema:
+        type: string
+        format: uuid
 
     BaseErrorResponse:
       type: object
@@ -204,10 +233,6 @@ components:
         - selection_mode
         - is_public
 
-    GroupBranchOption:
-      type: string
-      format: uuid
-
     CreateGroupResponse:
       type: object
       properties:
@@ -246,14 +271,43 @@ components:
         members:
           type: array
           items:
-            $ref: '#/componensts/schema/GetGroupsMemberResponseItem'
+            $ref: '#/componensts/schema/GroupMember'
 
-    GetGroupsMemberResponseItem:
+    GetGroupResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name: {type: string}
+            selection_mode: {type: string}
+            brand_name: {type: string}
+            brand_icon_path: {type: string}
+            address: {type: string}
+            contact_phone: {type: string}
+            members:
+              type: array
+              items:
+                $ref: '#/components/schemas/GroupMember'
+            branch_options:
+              type: array
+              items:
+                $ref: '#/components/schemas/GroupBranchOption'
+
+    GroupBranchOption:
+      type: string
+      format: uuid
+
+    GroupMember:
       type: object
       properties:
         id: {type: number}
         name: {type: string}
         photo_url: {type: string}
+        role: {type: string}
 
     PaginationResponse:
       type: object
@@ -413,6 +467,78 @@ components:
             next_page: 2
             last_page: 10
 
+    GetDefinedGroupResponse:
+      value:
+        data:
+          id: '81320520-65da-41cf-9fa2-61392a24ec1d'
+          name: 'Комната с выбранным местом'
+          selection_mode: 'defined'
+          brand_name: 'KFC'
+          brand_icon_path: '/icons/branches/kfc.svg'
+          address: 'Pr. KFC'
+          contact_phone: '79998886644'
+          members:
+            - id: 535435345345345
+              name: muhehe
+              photo_url: 'https://example.com/avatars/muhehe.svg'
+              role: 'owner'
+            - id: 2312321123112
+              name: sunsetsavorer
+              photo_url: 'https://example.com/avatars/sunsetsavorer.svg'
+              role: 'participant'
+
+    GetVotingGroupResponse:
+      value:
+        data:
+          id: '81320520-65da-41cf-9fa2-61392a24ec1d'
+          name: 'Комната с голосованием'
+          selection_mode: 'voting'
+          members:
+            - id: 535435345345345
+              name: muhehe
+              photo_url: 'https://example.com/avatars/muhehe.svg'
+              role: 'owner'
+            - id: 2312321123112
+              name: sunsetsavorer
+              photo_url: 'https://example.com/avatars/sunsetsavorer.svg'
+              role: 'participant'
+          branch_options:
+            - id: '059c0f25-500e-47aa-84bd-6baefc8bb0e5'
+              brand_name: 'KFC'
+              brand_icon_path: '/icons/kfc.svg'
+              votes_count: 1
+              members:
+                - 535435345345345
+            - id: '44473945-2bf4-407d-b943-4fadf091eb34'
+              brand_name: 'Siria'
+              brand_icon_path: '/icons/siria.svg'
+              votes_count: 1
+              members:
+                - 2312321123112
+
+    GetRandomGroupResponse:
+      value:
+        data:
+          id: '81320520-65da-41cf-9fa2-61392a24ec1d'
+          name: 'Комната с рандомом'
+          selection_mode: 'random'
+          members:
+            - id: 535435345345345
+              name: muhehe
+              photo_url: 'https://example.com/avatars/muhehe.svg'
+              role: 'owner'
+            - id: 2312321123112
+              name: sunsetsavorer
+              photo_url: 'https://example.com/avatars/sunsetsavorer.svg'
+              role: 'participant'
+          branch_options:
+            - id: '059c0f25-500e-47aa-84bd-6baefc8bb0e5'
+              brand_name: 'KFC'
+              brand_icon_path: '/icons/kfc.svg'
+            - id: '44473945-2bf4-407d-b943-4fadf091eb34'
+              brand_name: 'Siria'
+              brand_icon_path: '/icons/siria.svg'
+
   requestBodies:
     Signin:
       required: true
@@ -538,6 +664,20 @@ components:
           examples:
             Base:
               $ref: '#/components/examples/GetGroupsResponse'
+
+    GetGroup:
+      description: 'success request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetGroupResponse'
+          examples:
+            Defined:
+              $ref: '#/components/examples/GetDefinedGroupResponse'
+            Voting:
+              $ref: '#/components/examples/GetVotingGroupResponse'
+            Random:
+              $ref: '#/components/examples/GetRandomGroupResponse'
 
   securitySchemes:
     JWT:
