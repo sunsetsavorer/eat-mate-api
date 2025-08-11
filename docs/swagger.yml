@@ -506,13 +506,11 @@ components:
             - id: '059c0f25-500e-47aa-84bd-6baefc8bb0e5'
               brand_name: 'KFC'
               brand_icon_path: '/icons/kfc.svg'
-              votes_count: 1
               members:
                 - 535435345345345
             - id: '44473945-2bf4-407d-b943-4fadf091eb34'
               brand_name: 'Siria'
               brand_icon_path: '/icons/siria.svg'
-              votes_count: 1
               members:
                 - 2312321123112
 
