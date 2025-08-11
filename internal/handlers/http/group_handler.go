@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/sunsetsavorer/eat-mate-api/internal/dtos"
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/httpresp"
@@ -43,6 +44,7 @@ func (h GroupHandler) RegisterRoutes(router *gin.RouterGroup) {
 	group := router.Group("groups")
 	{
 		group.GET("/", h.getListAction)
+		group.GET("/:id/", h.getAction)
 	}
 }
 
@@ -147,4 +149,33 @@ func (h GroupHandler) getListAction(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: response})
+}
+
+func (h GroupHandler) getAction(c *gin.Context) {
+
+	groupIDStr := c.Param("id")
+	if groupIDStr == "" {
+		h.logger.Errorf("failed to get group id from ctx: %s", groupIDStr)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(
+					fmt.Errorf("epmty id"),
+				),
+			),
+		)
+		return
+	}
+
+	groupID, err := uuid.Parse(groupIDStr)
+	if err != nil {
+		h.logger.Errorf("failed to parse group id from ctx: %s", groupID)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(
+					fmt.Errorf("invalid group id"),
+				),
+			),
+		)
+		return
+	}
 }
