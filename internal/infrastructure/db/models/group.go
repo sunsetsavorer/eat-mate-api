@@ -15,6 +15,7 @@ type GroupModel struct {
 	Branch        BranchModel        `gorm:"foreignKey:BranchID"`
 	BranchOptions []BranchModel      `gorm:"many2many:group_branch_options;joinForeignKey:group_id;joinReferences:branch_id"`
 	Members       []GroupMemberModel `gorm:"foreignKey:GroupID"`
+	Votes         []VoteModel        `gorm:"foreignKey:GroupID"`
 }
 
 func (GroupModel) TableName() string {
@@ -35,6 +36,12 @@ func (m GroupModel) ToEntity() entities.GroupEntity {
 		members[i] = e.ToEntity()
 	}
 
+	votes := make([]entities.VoteEntity, len(m.Votes))
+
+	for i, e := range m.Votes {
+		votes[i] = e.ToEntity()
+	}
+
 	return entities.GroupEntity{
 		ID:            m.ID,
 		Name:          m.Name,
@@ -45,6 +52,7 @@ func (m GroupModel) ToEntity() entities.GroupEntity {
 		Branch:        m.Branch.ToEntity(),
 		BranchOptions: options,
 		Members:       members,
+		Votes:         votes,
 	}
 }
 

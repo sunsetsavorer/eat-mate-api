@@ -12,6 +12,7 @@ type GroupEntity struct {
 	Branch        BranchEntity        `json:"branch"`
 	BranchOptions []BranchEntity      `json:"branch_options"`
 	Members       []GroupMemberEntity `json:"members"`
+	Votes         []VoteEntity        `json:"votes"`
 }
 
 func (e GroupEntity) GetID() uuid.UUID {
@@ -84,4 +85,12 @@ func (e GroupEntity) GetMembers() []GroupMemberEntity {
 
 func (e *GroupEntity) SetMembers(v []GroupMemberEntity) {
 	e.Members = v
+}
+
+func (e GroupEntity) GetVotes() []VoteEntity {
+	return e.Votes
+}
+
+func (e *GroupEntity) SetVotes(v []VoteEntity) {
+	e.Votes = v
 }
