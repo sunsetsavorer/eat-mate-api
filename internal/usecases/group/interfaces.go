@@ -1,10 +1,14 @@
 package group
 
-import "github.com/sunsetsavorer/eat-mate-api/internal/entities"
+import (
+	"github.com/google/uuid"
+	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
+)
 
 type GroupRepositoryInterface interface {
 	Create(entity entities.GroupEntity) (entities.GroupEntity, error)
 	GetList(filter GroupsFilter) ([]entities.GroupEntity, int64, error)
+	GetByID(ID uuid.UUID) (entities.GroupEntity, error)
 }
 
 type UserRepositoryInterface interface {
