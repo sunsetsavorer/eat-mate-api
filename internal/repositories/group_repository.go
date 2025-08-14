@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"fmt"
+
+	"github.com/google/uuid"
 	"github.com/sunsetsavorer/eat-mate-api/internal/entities"
 	"github.com/sunsetsavorer/eat-mate-api/internal/exceptions"
 	"github.com/sunsetsavorer/eat-mate-api/internal/infrastructure/db"
@@ -100,4 +103,24 @@ func (r GroupRepository) GetList(filter group.GroupsFilter) ([]entities.GroupEnt
 	}
 
 	return groupEntities, count, nil
+}
+
+func (r GroupRepository) GetByID(ID uuid.UUID) (entities.GroupEntity, error) {
+
+	var group models.GroupModel
+
+	err := r.db.Client.
+		Model(&models.GroupModel{}).
+		Preload("Branch.Brand").
+		Preload("Members.User").
+		Preload("BranchOptions.Brand").
+		Preload("Votes").
+		First(&group, ID).
+		Error
+
+	if err != nil {
+		return entities.GroupEntity{}, exceptions.NewNotFoundError(fmt.Errorf("group with specified id wasn't found"))
+	}
+
+	return group.ToEntity(), nil
 }
