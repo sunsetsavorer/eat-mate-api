@@ -39,4 +39,30 @@ type (
 		Address       *string               `json:"address,omitempty"`
 		Members       []entities.UserEntity `json:"members"`
 	}
+
+	GetGroupResponse struct {
+		ID            uuid.UUID           `json:"id"`
+		Name          string              `json:"name"`
+		SelectionMode string              `json:"selection_mode"`
+		BrandName     string              `json:"brand_name,omitempty"`
+		BrandIconPath *string             `json:"brand_icon_path,omitempty"`
+		Address       *string             `json:"address,omitempty"`
+		ContactPhone  *string             `json:"contact_phone,omitempty"`
+		Members       []GroupMember       `json:"members"`
+		BranchOptions []GroupBranchOption `json:"branch_options,omitempty"`
+	}
+
+	GroupMember struct {
+		ID       int64   `json:"id"`
+		Name     string  `json:"name"`
+		PhotoURL *string `json:"photo_url"`
+		Role     string  `json:"role"`
+	}
+
+	GroupBranchOption struct {
+		ID            uuid.UUID `json:"id"`
+		BrandName     string    `json:"brand_name"`
+		BrandIconPath *string   `json:"brand_icon_path"`
+		Members       []int64   `json:"members"`
+	}
 )
