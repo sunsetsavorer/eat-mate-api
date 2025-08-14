@@ -111,6 +111,7 @@ func (r GroupRepository) GetByID(ID uuid.UUID) (entities.GroupEntity, error) {
 
 	err := r.db.Client.
 		Model(&models.GroupModel{}).
+		Where("is_active = ?", true).
 		Preload("Branch.Brand").
 		Preload("Members.User").
 		Preload("BranchOptions.Brand").
