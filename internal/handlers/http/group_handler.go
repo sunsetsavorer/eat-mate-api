@@ -178,4 +178,20 @@ func (h GroupHandler) getAction(c *gin.Context) {
 		)
 		return
 	}
+
+	groupRepository := repositories.NewGroupRepository(h.db)
+
+	uc := group.NewGetGroupUseCase(
+		h.logger,
+		groupRepository,
+	)
+
+	response, err := uc.Exec(groupID)
+	if err != nil {
+		h.logger.Errorf("get error from `get group` usecase: %v", err)
+		c.JSON(httpresp.GetError(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{Data: response})
 }
