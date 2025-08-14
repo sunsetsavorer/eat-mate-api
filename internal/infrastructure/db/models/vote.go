@@ -6,9 +6,9 @@ import (
 )
 
 type VoteModel struct {
-	GroupID  uuid.UUID     `gorm:"column:group_id"`
-	UserID   int64         `gorm:"column:user_id"`
-	BranchID uuid.NullUUID `gorm:"column:branch_id"`
+	GroupID  uuid.UUID `gorm:"column:group_id"`
+	UserID   int64     `gorm:"column:user_id"`
+	BranchID uuid.UUID `gorm:"column:branch_id"`
 
 	User   UserModel   `gorm:"foreignKey:UserID"`
 	Branch BranchModel `gorm:"foreignKey:BranchID"`
