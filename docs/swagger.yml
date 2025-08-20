@@ -139,6 +139,23 @@ paths:
           - $ref: '#/components/schemas/GroupIDRouteParameter'
       security:
         - JWT: []
+    delete:
+      summary: 'remove an authorized user from the group'
+      tags:
+        - Group
+      responses:
+          200:
+            $ref: '#/components/responses/EmptySuccess'
+          400:
+            $ref: '#/components/responses/BadRequestError'
+          401:
+            $ref: '#/components/responses/UnauthorizedError'
+          404:
+            $ref: '#/components/responses/NotFoundError'
+      parameters:
+          - $ref: '#/components/schemas/GroupIDRouteParameter'
+      security:
+        - JWT: []
 
 components:
   schemas:
