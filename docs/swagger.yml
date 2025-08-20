@@ -121,6 +121,25 @@ paths:
       parameters:
         - $ref: '#/components/schemas/GroupIDRouteParameter'
 
+  /v1/groups/{group_id}/members/:
+    post:
+      summary: 'adds an authorized user to the group'
+      tags:
+        - Group
+      responses:
+          200:
+            $ref: '#/components/responses/EmptySuccess'
+          400:
+            $ref: '#/components/responses/BadRequestError'
+          401:
+            $ref: '#/components/responses/UnauthorizedError'
+          404:
+            $ref: '#/components/responses/NotFoundError'
+      parameters:
+          - $ref: '#/components/schemas/GroupIDRouteParameter'
+      security:
+        - JWT: []
+
 components:
   schemas:
     PaginationPageQueryParameter:
