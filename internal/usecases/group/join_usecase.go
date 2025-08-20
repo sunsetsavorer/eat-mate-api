@@ -32,6 +32,7 @@ func (uc JoinGroupUseCase) Exec(dto dtos.JoinGroupDTO) error {
 
 	isInAnyGroup, err := uc.userRepository.IsInAnyGroup(dto.GetUserID())
 	if err != nil {
+		uc.logger.Errorf("get error while checking user in group presence: %v", err)
 		return exceptions.NewBadRequestError(fmt.Errorf("something went wrong. try later"))
 	}
 
@@ -52,6 +53,7 @@ func (uc JoinGroupUseCase) Exec(dto dtos.JoinGroupDTO) error {
 
 	err = uc.groupRepository.AddMember(memberEntity)
 	if err != nil {
+		uc.logger.Errorf("get error while add member to group: %v", err)
 		return exceptions.NewBadRequestError(fmt.Errorf("failed to join group"))
 	}
 
