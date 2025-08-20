@@ -125,3 +125,17 @@ func (r GroupRepository) GetByID(ID uuid.UUID) (entities.GroupEntity, error) {
 
 	return group.ToEntity(), nil
 }
+
+func (r GroupRepository) AddMember(entity entities.GroupMemberEntity) error {
+
+	var member models.GroupMemberModel
+
+	member.FromEntity(entity)
+
+	err := r.db.Client.Create(&member).Error
+	if err != nil {
+		return exceptions.NewRepositoryError(err)
+	}
+
+	return nil
+}

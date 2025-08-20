@@ -9,6 +9,7 @@ type GroupRepositoryInterface interface {
 	Create(entity entities.GroupEntity) (entities.GroupEntity, error)
 	GetList(filter GroupsFilter) ([]entities.GroupEntity, int64, error)
 	GetByID(ID uuid.UUID) (entities.GroupEntity, error)
+	AddMember(entity entities.GroupMemberEntity) error
 }
 
 type UserRepositoryInterface interface {
