@@ -39,14 +39,14 @@ func (h GroupHandler) RegisterRoutes(router *gin.RouterGroup) {
 	groupProtected := router.Group("groups", authMiddleware.Check)
 	{
 		groupProtected.POST("/", h.createAction)
-		groupProtected.POST("/:id/members/", h.joinAction)
-		groupProtected.DELETE("/:id/members/", h.leaveAction)
+		groupProtected.POST("/:group_id/members/", h.joinAction)
+		groupProtected.DELETE("/:group_id/members/", h.leaveAction)
 	}
 
 	group := router.Group("groups")
 	{
 		group.GET("/", h.getListAction)
-		group.GET("/:id/", h.getAction)
+		group.GET("/:group_id/", h.getAction)
 	}
 }
 
@@ -155,13 +155,13 @@ func (h GroupHandler) getListAction(c *gin.Context) {
 
 func (h GroupHandler) getAction(c *gin.Context) {
 
-	groupIDStr := c.Param("id")
+	groupIDStr := c.Param("group_id")
 	if groupIDStr == "" {
 		h.logger.Errorf("failed to get group id from ctx: %s", groupIDStr)
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewBadRequestError(
-					fmt.Errorf("epmty id"),
+					fmt.Errorf("empty group_id"),
 				),
 			),
 		)
@@ -211,13 +211,13 @@ func (h GroupHandler) joinAction(c *gin.Context) {
 		return
 	}
 
-	groupIDStr := c.Param("id")
+	groupIDStr := c.Param("group_id")
 	if groupIDStr == "" {
 		h.logger.Errorf("failed to get group id from ctx: %s", groupIDStr)
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewBadRequestError(
-					fmt.Errorf("epmty id"),
+					fmt.Errorf("empty group_id"),
 				),
 			),
 		)
@@ -276,13 +276,13 @@ func (h GroupHandler) leaveAction(c *gin.Context) {
 		return
 	}
 
-	groupIDStr := c.Param("id")
+	groupIDStr := c.Param("group_id")
 	if groupIDStr == "" {
 		h.logger.Errorf("failed to get group id from ctx: %s", groupIDStr)
 		c.JSON(
 			httpresp.GetError(
 				exceptions.NewBadRequestError(
-					fmt.Errorf("epmty id"),
+					fmt.Errorf("empty group_id"),
 				),
 			),
 		)
