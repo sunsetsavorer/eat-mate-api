@@ -199,4 +199,65 @@ func (h GroupHandler) getAction(c *gin.Context) {
 
 func (h GroupHandler) joinAction(c *gin.Context) {
 
+	userID, exists := h.GetUserID(c)
+	if !exists {
+		h.logger.Errorf("failed to get `user id` from context")
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewUnauthorizedError(fmt.Errorf("unauthorized")),
+			),
+		)
+		return
+	}
+
+	groupIDStr := c.Param("id")
+	if groupIDStr == "" {
+		h.logger.Errorf("failed to get group id from ctx: %s", groupIDStr)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(
+					fmt.Errorf("epmty id"),
+				),
+			),
+		)
+		return
+	}
+
+	groupID, err := uuid.Parse(groupIDStr)
+	if err != nil {
+		h.logger.Errorf("failed to parse group id from ctx: %s", groupID)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(
+					fmt.Errorf("invalid group id"),
+				),
+			),
+		)
+		return
+	}
+
+	groupRepository := repositories.NewGroupRepository(h.db)
+	userRepository := repositories.NewUserRepository(h.db)
+
+	dto := dtos.JoinGroupDTO{
+		GroupID: groupID,
+		UserID:  userID,
+	}
+
+	uc := group.NewJoinGroupUseCase(
+		h.logger,
+		groupRepository,
+		userRepository,
+	)
+
+	err = uc.Exec(dto)
+	if err != nil {
+		h.logger.Errorf("get error from `join group usecase`: %v", err)
+		c.JSON(httpresp.GetError(err))
+		return
+	}
+
+	// TODO: add ws
+
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{})
 }
