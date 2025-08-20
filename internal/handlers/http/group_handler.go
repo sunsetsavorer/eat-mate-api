@@ -40,6 +40,7 @@ func (h GroupHandler) RegisterRoutes(router *gin.RouterGroup) {
 	{
 		groupProtected.POST("/", h.createAction)
 		groupProtected.POST("/:id/members/", h.joinAction)
+		groupProtected.DELETE("/:id/members/", h.leaveAction)
 	}
 
 	group := router.Group("groups")
@@ -260,4 +261,8 @@ func (h GroupHandler) joinAction(c *gin.Context) {
 	// TODO: add ws
 
 	c.JSON(http.StatusOK, httpresp.SuccessDataResp{})
+}
+
+func (h GroupHandler) leaveAction(c *gin.Context) {
+
 }
