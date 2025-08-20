@@ -139,3 +139,53 @@ func (r GroupRepository) AddMember(entity entities.GroupMemberEntity) error {
 
 	return nil
 }
+
+func (r GroupRepository) RemoveMember(entity entities.GroupMemberEntity) error {
+
+	err := r.db.Client.
+		Where("user_id = ?", entity.GetUserID()).
+		Where("group_id = ?", entity.GetGroupID()).
+		Delete(&models.GroupMemberModel{}).Error
+
+	if err != nil {
+		return exceptions.NewRepositoryError(err)
+	}
+
+	return nil
+}
+
+func (r GroupRepository) GetMemberByID(userID int64, groupID uuid.UUID) (entities.GroupMemberEntity, error) {
+
+	var member models.GroupMemberModel
+
+	err := r.db.Client.
+		Model(&models.GroupMemberModel{}).
+		Where("user_id = ?", userID).
+		Where("group_id = ?", groupID).
+		Preload("User").
+		First(&member).
+		Error
+
+	if err != nil {
+		return entities.GroupMemberEntity{}, exceptions.NewRepositoryError(err)
+	}
+
+	result := member.ToEntity()
+
+	return result, nil
+}
+
+func (r GroupRepository) DeactivateByID(groupID uuid.UUID) error {
+
+	err := r.db.Client.
+		Model(&models.GroupModel{}).
+		Where("id = ?", groupID).
+		Update("is_active", false).
+		Error
+
+	if err != nil {
+		return exceptions.NewRepositoryError(err)
+	}
+
+	return nil
+}

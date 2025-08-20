@@ -10,6 +10,9 @@ type GroupRepositoryInterface interface {
 	GetList(filter GroupsFilter) ([]entities.GroupEntity, int64, error)
 	GetByID(ID uuid.UUID) (entities.GroupEntity, error)
 	AddMember(entity entities.GroupMemberEntity) error
+	RemoveMember(entity entities.GroupMemberEntity) error
+	GetMemberByID(userID int64, groupID uuid.UUID) (entities.GroupMemberEntity, error)
+	DeactivateByID(groupID uuid.UUID) error
 }
 
 type UserRepositoryInterface interface {
