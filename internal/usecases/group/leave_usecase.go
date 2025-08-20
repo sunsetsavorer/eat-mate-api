@@ -36,6 +36,7 @@ func (uc LeaveGroupUseCase) Exec(dto dtos.LeaveGroupDTO) error {
 
 	member, err := uc.groupRepository.GetMemberByID(dto.GetUserID(), dto.GetGroupID())
 	if err != nil {
+		uc.logger.Errorf("get error while fetching group member: %v", err)
 		return exceptions.NewBadRequestError(fmt.Errorf("you can't leave group you're not in"))
 	}
 
@@ -48,6 +49,7 @@ func (uc LeaveGroupUseCase) Exec(dto dtos.LeaveGroupDTO) error {
 	}
 
 	if err != nil {
+		uc.logger.Errorf("get error while removing member: %v", err)
 		return exceptions.NewBadRequestError(fmt.Errorf("something went wrong"))
 	}
 
