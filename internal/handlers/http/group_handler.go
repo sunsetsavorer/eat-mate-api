@@ -452,4 +452,26 @@ func (h GroupHandler) revokeVoteAction(c *gin.Context) {
 		return
 	}
 
+	groupRepository := repositories.NewGroupRepository(h.db)
+
+	dto := dtos.RevokeVoteDTO{
+		GroupID: groupID,
+		UserID:  userID,
+	}
+
+	uc := group.NewRevokeVoteUseCase(
+		h.logger,
+		groupRepository,
+	)
+
+	err = uc.Exec(dto)
+	if err != nil {
+		h.logger.Errorf("get error from `revoke vote` usecase: %v", err)
+		c.JSON(httpresp.GetError(err))
+		return
+	}
+
+	// TODO: add ws
+
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{})
 }
