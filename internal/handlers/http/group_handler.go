@@ -42,6 +42,7 @@ func (h GroupHandler) RegisterRoutes(router *gin.RouterGroup) {
 		groupProtected.POST("/:group_id/members/", h.joinAction)
 		groupProtected.DELETE("/:group_id/members/", h.leaveAction)
 		groupProtected.POST("/:group_id/votes/", h.voteAction)
+		groupProtected.DELETE("/:group_id/votes/", h.revokeVoteAction)
 	}
 
 	group := router.Group("groups")
@@ -410,4 +411,45 @@ func (h GroupHandler) voteAction(c *gin.Context) {
 	// TODO: add ws
 
 	c.JSON(http.StatusOK, httpresp.SuccessDataResp{})
+}
+
+func (h GroupHandler) revokeVoteAction(c *gin.Context) {
+
+	userID, exists := h.GetUserID(c)
+	if !exists {
+		h.logger.Errorf("failed to get `user id` from context")
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewUnauthorizedError(fmt.Errorf("unauthorized")),
+			),
+		)
+		return
+	}
+
+	groupIDStr := c.Param("group_id")
+	if groupIDStr == "" {
+		h.logger.Errorf("failed to get group id from ctx: %s", groupIDStr)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(
+					fmt.Errorf("empty group_id"),
+				),
+			),
+		)
+		return
+	}
+
+	groupID, err := uuid.Parse(groupIDStr)
+	if err != nil {
+		h.logger.Errorf("failed to parse group id from ctx: %s", groupID)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(
+					fmt.Errorf("invalid group id"),
+				),
+			),
+		)
+		return
+	}
+
 }
