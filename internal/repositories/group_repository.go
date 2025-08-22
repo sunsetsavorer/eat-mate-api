@@ -189,3 +189,31 @@ func (r GroupRepository) DeactivateByID(groupID uuid.UUID) error {
 
 	return nil
 }
+
+func (r GroupRepository) SaveVote(entity entities.VoteEntity) error {
+
+	var vote models.VoteModel
+
+	rowsAffected := r.db.Client.
+		Model(&models.VoteModel{}).
+		Where("user_id", entity.GetUserID()).
+		Where("group_id", entity.GetGroupID()).
+		Update("branch_id", entity.GetBranchID()).
+		RowsAffected
+
+	if rowsAffected != 0 {
+		return nil
+	}
+
+	vote.FromEntity(entity)
+
+	err := r.db.Client.
+		Create(&vote).
+		Error
+
+	if err != nil {
+		return exceptions.NewRepositoryError(err)
+	}
+
+	return nil
+}
