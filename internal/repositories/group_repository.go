@@ -217,3 +217,18 @@ func (r GroupRepository) SaveVote(entity entities.VoteEntity) error {
 
 	return nil
 }
+
+func (r GroupRepository) DeleteVote(entity entities.VoteEntity) error {
+
+	err := r.db.Client.
+		Where("user_id", entity.GetUserID()).
+		Where("group_id", entity.GetGroupID()).
+		Delete(&models.VoteModel{}).
+		Error
+
+	if err != nil {
+		return exceptions.NewRepositoryError(err)
+	}
+
+	return nil
+}

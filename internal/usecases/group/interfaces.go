@@ -14,6 +14,7 @@ type GroupRepositoryInterface interface {
 	GetMemberByID(userID int64, groupID uuid.UUID) (entities.GroupMemberEntity, error)
 	DeactivateByID(groupID uuid.UUID) error
 	SaveVote(entity entities.VoteEntity) error
+	DeleteVote(entity entities.VoteEntity) error
 }
 
 type UserRepositoryInterface interface {
