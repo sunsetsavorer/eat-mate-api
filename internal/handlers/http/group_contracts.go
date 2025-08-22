@@ -14,4 +14,8 @@ type (
 	GetGroupsRequest struct {
 		PaginationRequest
 	}
+
+	VoteRequest struct {
+		BranchID uuid.UUID `json:"branch_id" validate:"required"`
+	}
 )
