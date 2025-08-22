@@ -157,6 +157,44 @@ paths:
       security:
         - JWT: []
 
+  /v1/groups/{group_id}/votes/:
+    post:
+      summary: 'create vote in group'
+      tags:
+        - Group
+      requestBody:
+        $ref: '#/components/requestBodies/CreateVote'
+      responses:
+        200:
+          $ref: '#/components/responses/EmptySuccess'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+      parameters:
+          - $ref: '#/components/schemas/GroupIDRouteParameter'
+      security:
+        - JWT: []
+    delete:
+      summary: 'revoke vote of authorized user'
+      tags:
+        - Group
+      responses:
+        200:
+          $ref: '#/components/responses/EmptySuccess'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+      parameters:
+          - $ref: '#/components/schemas/GroupIDRouteParameter'
+      security:
+        - JWT: []
+
 components:
   schemas:
     PaginationPageQueryParameter:
@@ -352,6 +390,13 @@ components:
         next_page: {type: number}
         last_page: {type: number}
         limit: {type:number}
+
+    CreateVoteRequestBody:
+      type: object
+      properties:
+        branch_id: {type: string}
+      required:
+        - branch_id
 
   examples:
     BadRequestErrorResponse:
@@ -573,6 +618,10 @@ components:
               brand_name: 'Siria'
               brand_icon_path: '/icons/siria.svg'
 
+    CreateVoteRequestBody:
+      value:
+        branch_id: '6e35c66e-07b0-415e-96f8-813d0259d622'
+
   requestBodies:
     Signin:
       required: true
@@ -607,6 +656,16 @@ components:
               $ref: '#/components/examples/CreateVotingGroupRequestBody'
             Random:
               $ref: '#/components/examples/CreateRandomGroupRequestBody'
+
+    CreateVote:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateVoteRequestBody'
+          examples:
+            Base:
+              $ref: '#/components/examples/CreateVoteRequestBody'
 
   responses:
     BadRequestError:
