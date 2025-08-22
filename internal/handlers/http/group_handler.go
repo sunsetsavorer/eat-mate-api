@@ -331,4 +331,83 @@ func (h GroupHandler) leaveAction(c *gin.Context) {
 
 func (h GroupHandler) voteAction(c *gin.Context) {
 
+	userID, exists := h.GetUserID(c)
+	if !exists {
+		h.logger.Errorf("failed to get `user id` from context")
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewUnauthorizedError(fmt.Errorf("unauthorized")),
+			),
+		)
+		return
+	}
+
+	groupIDStr := c.Param("group_id")
+	if groupIDStr == "" {
+		h.logger.Errorf("failed to get group id from ctx: %s", groupIDStr)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(
+					fmt.Errorf("empty group_id"),
+				),
+			),
+		)
+		return
+	}
+
+	groupID, err := uuid.Parse(groupIDStr)
+	if err != nil {
+		h.logger.Errorf("failed to parse group id from ctx: %s", groupID)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(
+					fmt.Errorf("invalid group id"),
+				),
+			),
+		)
+		return
+	}
+
+	var req VoteRequest
+
+	err = c.ShouldBind(&req)
+	if err != nil {
+		h.logger.Errorf("failed to bind `create vote` request: %v", err)
+		c.JSON(
+			httpresp.GetError(
+				exceptions.NewBadRequestError(fmt.Errorf("failed to bind request")),
+			),
+		)
+		return
+	}
+
+	if invalid := h.validator.Struct(&req); invalid != nil {
+		h.logger.Errorf("`create vote` request validation error: %v", invalid)
+		c.JSON(httpresp.GetError(invalid))
+		return
+	}
+
+	groupRepository := repositories.NewGroupRepository(h.db)
+
+	dto := dtos.VoteDTO{
+		GroupID:  groupID,
+		UserID:   userID,
+		BranchID: req.BranchID,
+	}
+
+	uc := group.NewVoteUseCase(
+		h.logger,
+		groupRepository,
+	)
+
+	err = uc.Exec(dto)
+	if err != nil {
+		h.logger.Errorf("get error from `vote` usecase: %v", err)
+		c.JSON(httpresp.GetError(err))
+		return
+	}
+
+	// TODO: add ws
+
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{})
 }
