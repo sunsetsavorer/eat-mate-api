@@ -157,6 +157,30 @@ paths:
       security:
         - JWT: []
 
+  /v1/groups/{group_id}/members/{member_id}/:
+    delete:
+      summary: 'kick user from group'
+      tags:
+        - Group
+      responses:
+        200:
+          $ref: '#/components/responses/EmptySuccess'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        404:
+          $ref: '#/components/responses/NotFoundError'
+        422:
+          $ref: '#/components/responses/ValidationError'
+      parameters:
+        - $ref: '#/components/schemas/GroupIDRouteParameter'
+        - $ref: '#/components/schemas/MemberIDRouteParameter'
+      security:
+        - JWT: []
+
   /v1/groups/{group_id}/votes/:
     post:
       summary: 'create vote in group'
@@ -224,6 +248,14 @@ components:
       schema:
         type: string
         format: uuid
+
+    MemberIDRouteParameter:
+      in: path
+      name: member_id
+      required: true
+      schema:
+        type: number
+        format: int64
 
     BaseErrorResponse:
       type: object
@@ -419,6 +451,11 @@ components:
         errors:
           field1: 'this field is required'
           field2: 'this field has wrong format'
+
+    ForbiddenErrorResponse:
+      value:
+        errors:
+          other: 'forbidden'
 
     EmptySuccessResponse:
       value:
@@ -707,6 +744,16 @@ components:
           examples:
             Base:
               $ref: '#/components/examples/ValidationErrorResponse'
+
+    ForbiddenError:
+      description: 'forbidden error response'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseErrorResponse'
+          examples:
+            Base:
+              $ref: '#/components/examples/ForbiddenErrorResponse'
 
     EmptySuccess:
       description: 'empty success response'
