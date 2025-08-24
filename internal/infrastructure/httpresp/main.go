@@ -39,5 +39,11 @@ func GetError(err error) (int, any) {
 		}
 	}
 
+	if _, ok := err.(*exceptions.ForbiddenError); ok {
+		return http.StatusForbidden, ErrorResp[OtherError]{
+			Errors: OtherError{err.Error()},
+		}
+	}
+
 	return http.StatusBadRequest, fmt.Errorf("unknow response")
 }
