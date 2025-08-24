@@ -42,7 +42,7 @@ func (h GroupHandler) RegisterRoutes(router *gin.RouterGroup) {
 		groupProtected.POST("/", h.createAction)
 		groupProtected.POST("/:group_id/members/", h.joinAction)
 		groupProtected.DELETE("/:group_id/members/", h.leaveAction)
-		groupProtected.DELETE("/:group_id/members/:member_id/", h.kickAction)
+		groupProtected.DELETE("/:group_id/members/:member_id/", h.kickMemberAction)
 		groupProtected.POST("/:group_id/votes/", h.voteAction)
 		groupProtected.DELETE("/:group_id/votes/", h.revokeVoteAction)
 	}
@@ -478,7 +478,7 @@ func (h GroupHandler) revokeVoteAction(c *gin.Context) {
 	c.JSON(http.StatusOK, httpresp.SuccessDataResp{})
 }
 
-func (h GroupHandler) kickAction(c *gin.Context) {
+func (h GroupHandler) kickMemberAction(c *gin.Context) {
 
 	userID, exists := h.GetUserID(c)
 	if !exists {
@@ -526,4 +526,25 @@ func (h GroupHandler) kickAction(c *gin.Context) {
 		return
 	}
 
+	dto := dtos.KickMemberDTO{
+		UserID:   userID,
+		MemberID: memberID,
+		GroupID:  groupID,
+	}
+
+	groupRepository := repositories.NewGroupRepository(h.db)
+
+	uc := group.NewKickMemberUseCase(
+		h.logger,
+		groupRepository,
+	)
+
+	err = uc.Exec(dto)
+	if err != nil {
+		h.logger.Errorf("get error from `kick member` usecase: %v", err)
+		c.JSON(httpresp.GetError(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, httpresp.SuccessDataResp{})
 }
